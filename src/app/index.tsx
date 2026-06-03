@@ -1,5 +1,5 @@
-import { HomeView } from '@/features/home/presentation/views/home-view';
+import { OnboardingView } from '@/features/onboarding/presentation/views/onboarding-view';
 
 export default function HomeScreen() {
-  return <HomeView />;
+  return <OnboardingView />;
 }

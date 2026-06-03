@@ -24,6 +24,29 @@ export const Colors = {
   },
 } as const;
 
+export const BudgetinPalette = {
+  sage: '#D4DED9',
+  ink: '#151515',
+  coral: '#F06B61',
+  violet: '#6C70F6',
+  mint: '#9BD9E5',
+  stone: '#A19F97',
+} as const;
+
+export const BudgetinTheme = {
+  brand: BudgetinPalette,
+  surface: {
+    canvas: '#F7F2EB',
+    card: '#FFF9F1',
+    muted: '#ECE4D8',
+  },
+  text: {
+    primary: BudgetinPalette.ink,
+    secondary: '#5F584F',
+    inverted: '#FFF9F1',
+  },
+} as const;
+
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
 export const Fonts = Platform.select({

@@ -1,14 +1,14 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AnimatedSplashOverlay } from '@/core/components/animated-icon';
 import { initializeDatabase } from '@/core/database';
 import { useAppStore } from '@/core/store';
 import { appLogger } from '@/core/utils';
-import AppTabs from '@/core/components/app-tabs';
 
-export default function TabLayout() {
+export default function RootLayout() {
   const colorScheme = useColorScheme();
   const failBootstrap = useAppStore((state) => state.failBootstrap);
   const finishBootstrap = useAppStore((state) => state.finishBootstrap);
@@ -40,9 +40,14 @@ export default function TabLayout() {
   }, [failBootstrap, finishBootstrap, startBootstrap]);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <AnimatedSplashOverlay />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="(tabs)" />
+        </Stack>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }
