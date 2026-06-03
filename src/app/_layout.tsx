@@ -5,6 +5,7 @@ import { useColorScheme } from 'react-native';
 import { AnimatedSplashOverlay } from '@/core/components/animated-icon';
 import { initializeDatabase } from '@/core/database';
 import { useAppStore } from '@/core/store';
+import { appLogger } from '@/core/utils';
 import AppTabs from '@/core/components/app-tabs';
 
 export default function TabLayout() {
@@ -30,7 +31,7 @@ export default function TabLayout() {
           failBootstrap(message);
         }
 
-        console.error('Failed to initialize database', error);
+        appLogger.error('Failed to initialize database', error);
       });
 
     return () => {

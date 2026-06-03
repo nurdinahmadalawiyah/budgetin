@@ -7,6 +7,7 @@ import type {
 } from 'expo-sqlite';
 
 import { DATABASE_NAME, databaseMigrations } from '@/core/database/migrations';
+import { databaseLogger } from '@/core/utils';
 
 let databasePromise: Promise<SQLiteDatabase> | null = null;
 let initializationPromise: Promise<SQLiteDatabase> | null = null;
@@ -38,6 +39,7 @@ async function migrateDatabase(db: SQLiteDatabase) {
     .sort((left, right) => left.version - right.version);
 
   for (const migration of pendingMigrations) {
+    databaseLogger.info(`Running migration v${migration.version}: ${migration.name}`);
     await db.withTransactionAsync(async () => {
       await migration.up(db);
       await db.execAsync(`PRAGMA user_version = ${migration.version}`);
@@ -49,10 +51,13 @@ export async function initializeDatabase() {
   if (!initializationPromise) {
     initializationPromise = (async () => {
       const db = await openDatabase();
+      databaseLogger.info(`Opened database: ${DATABASE_NAME}`);
       await configureDatabase(db);
       await migrateDatabase(db);
+      databaseLogger.info('Database initialization completed');
       return db;
     })().catch((error) => {
+      databaseLogger.error('Database initialization failed', error);
       initializationPromise = null;
       throw error;
     });
