@@ -1,5 +1,5 @@
-import { OnboardingView } from '@/features/onboarding/presentation/views/onboarding-view';
+import { Redirect } from 'expo-router';
 
-export default function HomeScreen() {
-  return <OnboardingView />;
+export default function Index() {
+  return <Redirect href="./onboarding" />;
 }

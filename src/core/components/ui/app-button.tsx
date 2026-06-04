@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import {
   ActivityIndicator,
+  Platform,
   Pressable,
   PressableProps,
   StyleSheet,
@@ -71,6 +72,7 @@ export type AppButtonProps = Omit<PressableProps, 'style'> & {
 };
 
 export function AppButton({
+  android_ripple,
   children,
   disabled = false,
   fullWidth = false,
@@ -133,64 +135,103 @@ export function AppButton({
       />
     ) : null);
   const isTextVariant = variant === 'text';
+  const usesNativeTextRipple = isTextVariant && Platform.OS === 'android';
+  const containerStyle: ViewStyle = {
+    minHeight: sizeStyle.minHeight,
+    minWidth: isIconOnly ? sizeStyle.minHeight : undefined,
+    borderRadius: sizeStyle.borderRadius,
+    width: fullWidth ? '100%' : undefined,
+  };
 
   return (
-    <Pressable
-      accessibilityRole="button"
-      disabled={isDisabled}
-      style={({ pressed }) => [
-        styles.base,
-        {
-          minHeight: sizeStyle.minHeight,
-          minWidth: isIconOnly ? sizeStyle.minHeight : undefined,
-          paddingHorizontal: isIconOnly ? 0 : sizeStyle.paddingHorizontal,
-          borderRadius: sizeStyle.borderRadius,
-          backgroundColor:
-            pressed && isTextVariant ? pressedFillColor : variantStyle.backgroundColor,
-          borderColor: pressed && isTextVariant ? pressedFillColor : variantStyle.borderColor,
-          width: fullWidth ? '100%' : undefined,
-        },
+    <View
+      style={[
+        styles.container,
+        containerStyle,
         glow && variant === 'solid' ? styles.glow : null,
-        pressed ? (isTextVariant ? styles.textPressed : styles.pressed) : null,
         isDisabled ? styles.disabled : null,
         style,
-      ]}
-      {...pressableProps}>
-      {({ pressed }) => (
-        <View style={styles.content}>
-          {loading ? (
-            <ActivityIndicator
-              color={pressed && isTextVariant ? getPressedTextColor(tone) : variantStyle.textColor}
-            />
-          ) : (
-            <>
-              {resolvedPrefixIcon ? <View style={styles.icon}>{resolvedPrefixIcon}</View> : null}
-              {hasLabel ? (
-                <Text
-                  style={[
-                    styles.label,
-                    {
-                      color:
-                        pressed && isTextVariant
-                          ? getPressedTextColor(tone)
-                          : variantStyle.textColor,
-                      fontSize: sizeStyle.fontSize,
-                      lineHeight: sizeStyle.lineHeight,
-                    },
-                  ]}>
-                  {children}
-                </Text>
-              ) : null}
-              {iconRight ? <View style={styles.icon}>{iconRight}</View> : null}
-            </>
-          )}
-        </View>
-      )}
-    </Pressable>
+      ]}>
+      <Pressable
+        android_ripple={
+          usesNativeTextRipple
+            ? (android_ripple ?? {
+                color: pressedFillColor,
+                borderless: false,
+                foreground: false,
+              })
+            : android_ripple
+        }
+        accessibilityRole="button"
+        disabled={isDisabled}
+        style={({ pressed }) => [
+          styles.base,
+          {
+            minHeight: sizeStyle.minHeight,
+            minWidth: isIconOnly ? sizeStyle.minHeight : undefined,
+            paddingHorizontal: isIconOnly ? 0 : sizeStyle.paddingHorizontal,
+            borderRadius: sizeStyle.borderRadius,
+            backgroundColor:
+              pressed && isTextVariant && !usesNativeTextRipple
+                ? pressedFillColor
+                : variantStyle.backgroundColor,
+            borderColor:
+              pressed && isTextVariant && !usesNativeTextRipple
+                ? pressedFillColor
+                : variantStyle.borderColor,
+          },
+          pressed
+            ? isTextVariant
+              ? usesNativeTextRipple
+                ? styles.textPressedNative
+                : styles.textPressed
+              : styles.pressed
+            : null,
+        ]}
+        {...pressableProps}>
+        {({ pressed }) => (
+          <View style={styles.content}>
+            {loading ? (
+              <ActivityIndicator
+                color={
+                  pressed && isTextVariant && !usesNativeTextRipple
+                    ? getPressedTextColor(tone)
+                    : variantStyle.textColor
+                }
+              />
+            ) : (
+              <>
+                {resolvedPrefixIcon ? <View style={styles.icon}>{resolvedPrefixIcon}</View> : null}
+                {hasLabel ? (
+                  <Text
+                    style={[
+                      styles.label,
+                      {
+                        color:
+                          pressed && isTextVariant && !usesNativeTextRipple
+                            ? getPressedTextColor(tone)
+                            : variantStyle.textColor,
+                        fontSize: sizeStyle.fontSize,
+                        lineHeight: sizeStyle.lineHeight,
+                      },
+                    ]}>
+                    {children}
+                  </Text>
+                ) : null}
+                {iconRight ? <View style={styles.icon}>{iconRight}</View> : null}
+              </>
+            )}
+          </View>
+        )}
+      </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    overflow: 'hidden',
+  },
   base: {
     alignItems: 'center',
     borderWidth: 1,
@@ -218,8 +259,10 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.995 }],
   },
   textPressed: {
+    opacity: 0.96,
+  },
+  textPressedNative: {
     opacity: 1,
-    transform: [{ scale: 0.985 }],
   },
   disabled: {
     opacity: 0.55,
