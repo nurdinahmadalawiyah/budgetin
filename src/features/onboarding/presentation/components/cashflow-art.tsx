@@ -24,15 +24,15 @@ export function CashflowArt({
           <View style={[styles.moneyDot, { backgroundColor: slide.accent }]} />
         </View>
         <View style={styles.moneyStack}>
-          <View style={[styles.moneyTile, { backgroundColor: theme.onboarding.cashTileStrong }]} />
           <View style={[styles.moneyTile, { backgroundColor: theme.onboarding.cashTileMuted }]} />
+          <View style={[styles.moneyTile, { backgroundColor: theme.onboarding.cashTileStrong }]} />
           <View style={[styles.moneyTileTall, { backgroundColor: slide.accent }]} />
         </View>
         <View style={[styles.summaryCard, { backgroundColor: theme.onboarding.summaryCard }]}>
           <View style={[styles.summaryChip, { backgroundColor: slide.accentSoft }]} />
           <View style={styles.summaryBars}>
             <View style={[styles.summaryBar, { backgroundColor: slide.accent }]} />
-            <View style={[styles.summaryBarShort, { backgroundColor: slide.accentMuted }]} />
+            <View style={[styles.summaryBarShort, { backgroundColor: theme.brand.coral }]} />
           </View>
         </View>
       </View>

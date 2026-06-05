@@ -14,9 +14,7 @@ export function QuizArt({
 }) {
   return (
     <View style={[styles.artCard, { backgroundColor: slide.accentSoft }]}>
-      <View
-        style={[styles.blob, styles.quizBlobTop, { backgroundColor: theme.onboarding.quizBlobSoft }]}
-      />
+      <View style={[styles.blob, styles.quizBlobTop, { backgroundColor: slide.accentSoft }]} />
       <View
         style={[
           styles.questionCard,
@@ -32,19 +30,19 @@ export function QuizArt({
         <View style={styles.answerColumn}>
           <View style={[styles.answerChoice, { borderColor: slide.accentMuted }]}>
             <View style={[styles.answerRadio, { borderColor: slide.accent }]} />
-            <View style={[styles.answerText, { backgroundColor: theme.onboarding.quizChoiceLine }]} />
+            <View style={[styles.answerText, { backgroundColor: slide.accentMuted }]} />
           </View>
           <View
             style={[
               styles.answerChoice,
-              { borderColor: slide.accent, backgroundColor: theme.onboarding.quizChoiceActive },
+              { borderColor: slide.accent, backgroundColor: slide.accentSoft },
             ]}>
             <View style={[styles.answerRadioSelected, { backgroundColor: slide.accent }]} />
             <View style={[styles.answerTextSelected, { backgroundColor: slide.accentMuted }]} />
           </View>
-          <View style={[styles.answerChoice, { borderColor: theme.onboarding.quizChoiceMuted }]}>
+          <View style={[styles.answerChoice, { borderColor: slide.accentMuted }]}>
             <View style={[styles.answerRadio, { borderColor: slide.accentMuted }]} />
-            <View style={[styles.answerText, { backgroundColor: theme.onboarding.quizChoiceLineAlt }]} />
+            <View style={[styles.answerText, { backgroundColor: slide.accentMuted }]} />
           </View>
         </View>
       </View>

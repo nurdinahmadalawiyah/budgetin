@@ -30,23 +30,23 @@ export function OnboardingView() {
         art: "cashflow",
         title: "BUDGET KAMU, TAPI LEBIH WARAS.",
         copy: "Catat cashflow, pilih metode budgeting yang cocok, lalu app bantu setup kategori otomatis dari income kamu.",
-        accent: theme.text.primary,
-        accentSoft: BudgetinPalette.sage,
-        accentMuted: BudgetinPalette.mint,
+        accent: BudgetinPalette.coral,
+        accentSoft: theme.onboarding.cashBlobSoft,
+        accentMuted: theme.onboarding.cashTileMuted,
       },
       {
         art: "quiz",
         title: "QUIZ DULU, BARU BUDGETING.",
         copy: "Jawab 5 pertanyaan soal spending, impulsif, goals, comfort level, dan risk appetite.",
-        accent: BudgetinPalette.coral,
+        accent: BudgetinPalette.violet,
         accentSoft: theme.onboarding.quizBlobSoft,
-        accentMuted: theme.brand.coral,
+        accentMuted: theme.onboarding.quizChoiceMuted,
       },
       {
         art: "gold",
         title: "EMAS JUGA IKUT KE-PLAN.",
         copy: "Track gram Antam, UBS, atau perhiasan. Goal bisa berbentuk uang maupun target gram.",
-        accent: BudgetinPalette.violet,
+        accent: BudgetinPalette.gold,
         accentSoft: theme.onboarding.goldBlobSoft,
         accentMuted: theme.onboarding.goldBarSmall,
       },
@@ -90,6 +90,11 @@ export function OnboardingView() {
   };
 
   const handleLeftPress = () => {
+    if (isLastSlide) {
+      goToSlide(index - 1);
+      return;
+    }
+
     router.replace("/(tabs)");
   };
 
@@ -290,7 +295,7 @@ export function OnboardingView() {
               tone="stone"
               onPress={handleLeftPress}
             >
-              Skip
+              {isLastSlide ? "Back" : "Skip"}
             </AppButton>
 
             <AppButton
