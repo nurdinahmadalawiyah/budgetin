@@ -5,6 +5,7 @@ Budgetin adalah aplikasi budgeting berbasis Expo SDK 56 yang sedang dibangun unt
 Saat ini repo ini sudah memiliki:
 
 - flow onboarding 3 slide dengan ilustrasi custom
+- halaman auth dengan CTA Google dan guest mode
 - navigasi manual berbasis React Navigation
 - state global ringan dengan Zustand
 - bootstrap database lokal menggunakan `expo-sqlite`
@@ -85,6 +86,8 @@ budgetin/
 ├── src/
 │   ├── core/
 │   │   ├── components/
+│   │   │   ├── layout/
+│   │   │   └── ui/
 │   │   ├── database/
 │   │   ├── navigation/
 │   │   ├── network/
@@ -92,10 +95,11 @@ budgetin/
 │   │   ├── theme/
 │   │   └── utils/
 │   ├── features/
+│   │   ├── auth/
 │   │   ├── explore/
 │   │   ├── home/
 │   │   └── onboarding/
-│   └── screens/
+│   └── types/
 └── scripts/
 ```
 
@@ -103,7 +107,7 @@ Ringkasnya:
 
 - `src/core` berisi fondasi aplikasi yang reusable.
 - `src/features` berisi implementasi per fitur.
-- `src/screens` menjadi adapter screen untuk navigator.
+- navigator langsung mengimpor `presentation/views` dari tiap fitur.
 - `App.tsx` menangani bootstrap font, database, dan root navigation.
 
 ## Arsitektur
@@ -114,15 +118,18 @@ Repo ini bergerak ke arah feature-driven architecture. Pola yang saat ini sudah 
 - navigator dipisah di `src/core/navigation`
 - state aplikasi dipusatkan di `src/core/store`
 - database dan network dipisah sebagai service layer di `src/core`
+- komponen shared seperti shell/layout berada di `src/core/components`
 
-Catatan penting: dokumen [INSTRUCTION.md](/Volumes/MobileDev/Projects/ExpoProject/budgetin/INSTRUCTION.md) masih menjelaskan target arsitektur yang lebih jauh, termasuk domain, data, dan presentation layer yang lebih ketat. Implementasi saat ini baru sebagian menuju struktur tersebut.
+Catatan penting: dokumen [INSTRUCTION.md](/Volumes/MobileDev/Projects/ExpoProject/budgetin/INSTRUCTION.md) sekarang sudah diselaraskan dengan kondisi repo saat ini, termasuk keputusan untuk memakai React Navigation manual dan direct import `view` dari feature.
 
 ## Flow Aplikasi Saat Ini
 
 1. App memuat font dan inisialisasi database SQLite.
 2. User yang belum menyelesaikan onboarding akan masuk ke screen onboarding.
-3. Setelah onboarding selesai, user diarahkan ke tab utama.
-4. Tab utama saat ini terdiri dari:
+3. Setelah onboarding selesai, user masuk ke flow auth.
+4. User bisa lanjut dengan Google CTA atau guest mode.
+5. Setelah session aktif, user diarahkan ke tab utama.
+6. Tab utama saat ini terdiri dari:
    - `Home`
    - `Explore`
 
@@ -153,6 +160,7 @@ Migration awal yang sudah tersedia:
 Yang sudah ada:
 
 - visual onboarding custom
+- visual auth custom
 - dark theme dasar untuk app shell
 - bootstrap database
 - fondasi API client
@@ -163,7 +171,7 @@ Yang masih terlihat sebagai placeholder:
 - konten `Home`
 - konten `Explore`
 - integrasi API bisnis
-- persistence auth token yang benar-benar terhubung ke flow login
+- persistence auth token yang benar-benar terhubung ke flow auth
 
 ## File Penting
 
@@ -171,6 +179,8 @@ Yang masih terlihat sebagai placeholder:
 - [app.json](/Volumes/MobileDev/Projects/ExpoProject/budgetin/app.json)
 - [package.json](/Volumes/MobileDev/Projects/ExpoProject/budgetin/package.json)
 - [src/core/navigation/root-navigator.tsx](/Volumes/MobileDev/Projects/ExpoProject/budgetin/src/core/navigation/root-navigator.tsx)
+- [src/core/navigation/app-tabs.tsx](/Volumes/MobileDev/Projects/ExpoProject/budgetin/src/core/navigation/app-tabs.tsx)
+- [src/features/auth/presentation/views/auth-view.tsx](/Volumes/MobileDev/Projects/ExpoProject/budgetin/src/features/auth/presentation/views/auth-view.tsx)
 - [src/core/database/database.service.ts](/Volumes/MobileDev/Projects/ExpoProject/budgetin/src/core/database/database.service.ts)
 - [src/features/onboarding/presentation/views/onboarding-view.tsx](/Volumes/MobileDev/Projects/ExpoProject/budgetin/src/features/onboarding/presentation/views/onboarding-view.tsx)
 
