@@ -33,19 +33,86 @@ export const BudgetinPalette = {
   stone: '#A19F97',
 } as const;
 
-export const BudgetinTheme = {
-  brand: BudgetinPalette,
-  surface: {
-    canvas: '#F7F2EB',
-    card: '#FFF9F1',
-    muted: '#ECE4D8',
+export const BudgetinThemes = {
+  light: {
+    brand: BudgetinPalette,
+    surface: {
+      canvas: '#F7F2EB',
+      card: '#FFF9F1',
+      muted: '#ECE4D8',
+    },
+    text: {
+      primary: BudgetinPalette.ink,
+      secondary: '#5F584F',
+      inverted: '#FFF9F1',
+    },
+    onboarding: {
+      brandPill: '#ECE4D8',
+      pageIndicatorInactive: '#D9D0C4',
+      shadow: '0 18px 50px rgba(88, 68, 38, 0.16)',
+      backgroundGlowMint: 'rgba(155, 217, 229, 0.18)',
+      backgroundGlowViolet: 'rgba(108, 112, 246, 0.14)',
+      backgroundGlowCoral: 'rgba(240, 107, 97, 0.14)',
+      cardShadow: '0 10px 28px rgba(0, 0, 0, 0.08)',
+      goldPillShadow: '0 8px 18px rgba(138, 100, 23, 0.12)',
+      cashBlobSoft: '#EEF7F4',
+      cashTileStrong: '#DCEAE6',
+      cashTileMuted: '#BEDDD9',
+      summaryCard: '#EEF4F1',
+      quizBlobSoft: '#FDECE8',
+      quizChoiceActive: '#FDF0EE',
+      quizChoiceMuted: '#EBCFB5',
+      quizChoiceLine: '#EFD8C7',
+      quizChoiceLineAlt: '#F0DCC8',
+      goldBlobSoft: '#F1F1FF',
+      goldBarMedium: '#8F93FF',
+      goldBarSmall: '#C8CAFF',
+      goldPill: '#EFF0FF',
+    },
+    statusBarStyle: 'dark',
   },
-  text: {
-    primary: BudgetinPalette.ink,
-    secondary: '#5F584F',
-    inverted: '#FFF9F1',
+  dark: {
+    brand: BudgetinPalette,
+    surface: {
+      canvas: '#12100F',
+      card: '#1A1816',
+      muted: '#2A2724',
+    },
+    text: {
+      primary: '#FFF6EC',
+      secondary: '#C3BBB1',
+      inverted: BudgetinPalette.ink,
+    },
+    onboarding: {
+      brandPill: '#2A2724',
+      pageIndicatorInactive: '#49443D',
+      shadow: '0 18px 50px rgba(0, 0, 0, 0.34)',
+      backgroundGlowMint: 'rgba(155, 217, 229, 0.14)',
+      backgroundGlowViolet: 'rgba(108, 112, 246, 0.2)',
+      backgroundGlowCoral: 'rgba(240, 107, 97, 0.18)',
+      cardShadow: '0 10px 28px rgba(0, 0, 0, 0.24)',
+      goldPillShadow: '0 8px 18px rgba(0, 0, 0, 0.28)',
+      cashBlobSoft: '#23332E',
+      cashTileStrong: '#30413B',
+      cashTileMuted: '#45645C',
+      summaryCard: '#232927',
+      quizBlobSoft: '#3C2624',
+      quizChoiceActive: '#402A28',
+      quizChoiceMuted: '#6E534C',
+      quizChoiceLine: '#8B6A64',
+      quizChoiceLineAlt: '#A57F77',
+      goldBlobSoft: '#25263B',
+      goldBarMedium: '#868AF5',
+      goldBarSmall: '#5B609F',
+      goldPill: '#24253C',
+    },
+    statusBarStyle: 'light',
   },
 } as const;
+
+export type BudgetinThemeTokens = (typeof BudgetinThemes)[keyof typeof BudgetinThemes];
+
+export const BudgetinTheme = BudgetinThemes.light;
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 

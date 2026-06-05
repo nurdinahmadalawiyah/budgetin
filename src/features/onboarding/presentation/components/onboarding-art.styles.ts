@@ -1,7 +1,5 @@
 import { StyleSheet } from 'react-native';
 
-import { BudgetinTheme } from '@/core/theme/theme';
-
 export const onboardingArtStyles = StyleSheet.create({
   artCard: {
     alignSelf: 'center',
@@ -72,7 +70,6 @@ export const onboardingArtStyles = StyleSheet.create({
   },
   summaryCard: {
     borderRadius: 18,
-    backgroundColor: '#EEF4F1',
     padding: 12,
     gap: 12,
   },
@@ -103,7 +100,6 @@ export const onboardingArtStyles = StyleSheet.create({
     paddingVertical: 9,
   },
   floatingBadgeText: {
-    color: BudgetinTheme.text.inverted,
     fontSize: 12,
     fontWeight: '700',
   },
@@ -128,7 +124,6 @@ export const onboardingArtStyles = StyleSheet.create({
     paddingVertical: 7,
   },
   questionBadgeText: {
-    color: BudgetinTheme.text.inverted,
     fontSize: 12,
     fontWeight: '800',
   },

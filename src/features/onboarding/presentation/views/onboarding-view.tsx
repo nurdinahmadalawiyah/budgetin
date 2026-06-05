@@ -12,36 +12,10 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AppButton } from "@/core/components/ui/app-button";
-import { BudgetinPalette, BudgetinTheme } from "@/core/theme/theme";
+import { BudgetinPalette } from "@/core/theme/theme";
+import { useBudgetinTheme } from "@/core/theme/hooks/use-budgetin-theme";
 import { OnboardingHeroArt } from "@/features/onboarding/presentation/components/onboarding-hero-art";
 import { OnboardingSlide } from "@/features/onboarding/presentation/components/onboarding-art.types";
-
-const slides: OnboardingSlide[] = [
-  {
-    art: "cashflow",
-    title: "Budget kamu, tapi lebih waras.",
-    copy: "Catat cashflow, pilih metode budgeting yang cocok, lalu app bantu setup kategori otomatis dari income kamu.",
-    accent: BudgetinPalette.ink,
-    accentSoft: BudgetinPalette.sage,
-    accentMuted: BudgetinPalette.mint,
-  },
-  {
-    art: "quiz",
-    title: "Quiz dulu, baru budgeting.",
-    copy: "Jawab 5 pertanyaan soal spending, impulsif, goals, comfort level, dan risk appetite.",
-    accent: BudgetinPalette.coral,
-    accentSoft: "#FCE2DE",
-    accentMuted: "#F5A69F",
-  },
-  {
-    art: "gold",
-    title: "Emas juga ikut ke-plan.",
-    copy: "Track gram Antam, UBS, atau perhiasan. Goal bisa berbentuk uang maupun target gram.",
-    accent: BudgetinPalette.violet,
-    accentSoft: "#E7E8FF",
-    accentMuted: "#B9BCFF",
-  },
-];
 
 export function OnboardingView() {
   const [index, setIndex] = useState(0);
@@ -49,6 +23,36 @@ export function OnboardingView() {
   const scrollRef = useRef<ScrollView>(null);
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const theme = useBudgetinTheme();
+  const slides: OnboardingSlide[] = useMemo(
+    () => [
+      {
+        art: "cashflow",
+        title: "Budget kamu, tapi lebih waras.",
+        copy: "Catat cashflow, pilih metode budgeting yang cocok, lalu app bantu setup kategori otomatis dari income kamu.",
+        accent: theme.text.primary,
+        accentSoft: BudgetinPalette.sage,
+        accentMuted: BudgetinPalette.mint,
+      },
+      {
+        art: "quiz",
+        title: "Quiz dulu, baru budgeting.",
+        copy: "Jawab 5 pertanyaan soal spending, impulsif, goals, comfort level, dan risk appetite.",
+        accent: BudgetinPalette.coral,
+        accentSoft: theme.onboarding.quizBlobSoft,
+        accentMuted: theme.brand.coral,
+      },
+      {
+        art: "gold",
+        title: "Emas juga ikut ke-plan.",
+        copy: "Track gram Antam, UBS, atau perhiasan. Goal bisa berbentuk uang maupun target gram.",
+        accent: BudgetinPalette.violet,
+        accentSoft: theme.onboarding.goldBlobSoft,
+        accentMuted: theme.onboarding.goldBarSmall,
+      },
+    ],
+    [theme],
+  );
   const slide = slides[index];
   const isLastSlide = index === slides.length - 1;
   const isWide = width >= 900;
@@ -101,27 +105,64 @@ export function OnboardingView() {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-      <StatusBar style="dark" />
+      <StatusBar style={theme.statusBarStyle} />
 
       <View
         style={[
           styles.screen,
           styles.screenContent,
           isWide ? styles.screenContentWide : styles.screenContentCompact,
+          { backgroundColor: theme.surface.card },
           {
             paddingTop: isWide ? 28 : Math.max(insets.top, 16),
             paddingBottom: isWide ? 28 : Math.max(insets.bottom, 16),
           },
         ]}
       >
+        <View
+          pointerEvents="none"
+          style={[
+            styles.backgroundGlow,
+            styles.backgroundGlowMint,
+            {
+              backgroundColor: theme.onboarding.backgroundGlowMint,
+              boxShadow: `0 0 120px 36px ${theme.onboarding.backgroundGlowMint}`,
+            },
+          ]}
+        />
+        <View
+          pointerEvents="none"
+          style={[
+            styles.backgroundGlow,
+            styles.backgroundGlowViolet,
+            {
+              backgroundColor: theme.onboarding.backgroundGlowViolet,
+              boxShadow: `0 0 140px 42px ${theme.onboarding.backgroundGlowViolet}`,
+            },
+          ]}
+        />
+        <View
+          pointerEvents="none"
+          style={[
+            styles.backgroundGlow,
+            styles.backgroundGlowCoral,
+            {
+              backgroundColor: theme.onboarding.backgroundGlowCoral,
+              boxShadow: `0 0 120px 34px ${theme.onboarding.backgroundGlowCoral}`,
+            },
+          ]}
+        />
+
         {isWide ? (
           <View style={styles.brandPanel}>
-            <View style={styles.brandPill}>
-              <View style={styles.brandDot} />
-              <Text style={styles.brandPillText}>Budgetin onboarding</Text>
+            <View style={[styles.brandPill, { backgroundColor: theme.onboarding.brandPill }]}>
+              <View style={[styles.brandDot, { backgroundColor: theme.text.primary }]} />
+              <Text style={[styles.brandPillText, { color: theme.text.secondary }]}>
+                Budgetin onboarding
+              </Text>
             </View>
-            <Text style={styles.brandTitle}>Budgetin</Text>
-            <Text style={styles.brandCopy}>
+            <Text style={[styles.brandTitle, { color: theme.text.primary }]}>Budgetin</Text>
+            <Text style={[styles.brandCopy, { color: theme.text.secondary }]}>
               Onboarding ini mengikuti prototype HTML kamu, tapi dibangun ulang
               dengan pola layout native supaya lebih nyaman dipelajari di Expo
               Router.
@@ -166,6 +207,10 @@ export function OnboardingView() {
             styles.phoneShell,
             isWide ? styles.phoneShellWide : styles.phoneShellCompact,
             shellWidth ? { width: shellWidth } : null,
+            {
+              backgroundColor: "transparent",
+              boxShadow: isWide ? theme.onboarding.shadow : undefined,
+            },
           ]}
         >
           <View style={styles.topBar}>
@@ -175,6 +220,7 @@ export function OnboardingView() {
                   key={item.title}
                   style={[
                     styles.pageIndicatorTrack,
+                    { backgroundColor: theme.onboarding.pageIndicatorInactive },
                     dotIndex === index
                       ? [
                           styles.pageIndicatorTrackActive,
@@ -207,10 +253,10 @@ export function OnboardingView() {
                 ]}
               >
                 <View style={styles.mainContent}>
-                  <OnboardingHeroArt slide={item} />
+                  <OnboardingHeroArt slide={item} theme={theme} />
                   <View style={styles.textBlock}>
-                    <Text style={styles.title}>{item.title}</Text>
-                    <Text style={styles.copy}>{item.copy}</Text>
+                    <Text style={[styles.title, { color: theme.text.primary }]}>{item.title}</Text>
+                    <Text style={[styles.copy, { color: theme.text.secondary }]}>{item.copy}</Text>
                   </View>
                 </View>
               </View>
@@ -243,13 +289,35 @@ export function OnboardingView() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: BudgetinTheme.surface.card,
   },
   screenContent: {
     flexGrow: 1,
     justifyContent: "center",
     gap: 28,
     paddingHorizontal: 0,
+  },
+  backgroundGlow: {
+    position: "absolute",
+    borderRadius: 999,
+    opacity: 0.9,
+  },
+  backgroundGlowMint: {
+    width: 140,
+    height: 140,
+    left: 8,
+    top: 120,
+  },
+  backgroundGlowViolet: {
+    width: 150,
+    height: 150,
+    right: 40,
+    top: 70,
+  },
+  backgroundGlowCoral: {
+    width: 130,
+    height: 130,
+    right: 30,
+    bottom: 24,
   },
   screenContentCompact: {
     alignItems: "stretch",
@@ -269,7 +337,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
     borderRadius: 999,
-    backgroundColor: BudgetinTheme.surface.muted,
     paddingHorizontal: 14,
     paddingVertical: 10,
   },
@@ -277,22 +344,18 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 999,
-    backgroundColor: BudgetinPalette.ink,
   },
   brandPillText: {
-    color: "#4d463d",
     fontSize: 13,
     fontWeight: "600",
   },
   brandTitle: {
-    color: BudgetinTheme.text.primary,
     fontSize: 54,
     lineHeight: 58,
     fontWeight: "800",
     letterSpacing: -1.6,
   },
   brandCopy: {
-    color: BudgetinTheme.text.secondary,
     fontSize: 17,
     lineHeight: 27,
   },
@@ -311,7 +374,6 @@ const styles = StyleSheet.create({
     minHeight: 760,
     width: "100%",
     maxWidth: 430,
-    backgroundColor: BudgetinTheme.surface.card,
     justifyContent: "space-between",
   },
   phoneShellCompact: {
@@ -327,7 +389,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 18,
     paddingBottom: 24,
-    boxShadow: "0 18px 50px rgba(88, 68, 38, 0.16)",
   },
   topBar: {
     alignItems: "stretch",
@@ -343,7 +404,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 6,
     borderRadius: 999,
-    backgroundColor: "#d9d0c4",
   },
   pageIndicatorTrackActive: {
     backgroundColor: BudgetinPalette.ink,
@@ -368,7 +428,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   title: {
-    color: BudgetinTheme.text.primary,
     fontSize: 38,
     lineHeight: 42,
     fontWeight: "800",
@@ -376,7 +435,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   copy: {
-    color: BudgetinTheme.text.secondary,
     fontSize: 16,
     lineHeight: 25,
     textAlign: "left",
