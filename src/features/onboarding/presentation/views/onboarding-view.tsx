@@ -12,10 +12,10 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AppButton } from "@/core/components/ui/app-button";
-import { BudgetinPalette } from "@/core/theme/theme";
 import { useBudgetinTheme } from "@/core/theme/hooks/use-budgetin-theme";
-import { OnboardingHeroArt } from "@/features/onboarding/presentation/components/onboarding-hero-art";
+import { BudgetinPalette, Fonts } from "@/core/theme/theme";
 import { OnboardingSlide } from "@/features/onboarding/presentation/components/onboarding-art.types";
+import { OnboardingHeroArt } from "@/features/onboarding/presentation/components/onboarding-hero-art";
 
 export function OnboardingView() {
   const [index, setIndex] = useState(0);
@@ -28,7 +28,7 @@ export function OnboardingView() {
     () => [
       {
         art: "cashflow",
-        title: "Budget kamu, tapi lebih waras.",
+        title: "BUDGET KAMU, TAPI LEBIH WARAS.",
         copy: "Catat cashflow, pilih metode budgeting yang cocok, lalu app bantu setup kategori otomatis dari income kamu.",
         accent: theme.text.primary,
         accentSoft: BudgetinPalette.sage,
@@ -36,7 +36,7 @@ export function OnboardingView() {
       },
       {
         art: "quiz",
-        title: "Quiz dulu, baru budgeting.",
+        title: "QUIZ DULU, BARU BUDGETING.",
         copy: "Jawab 5 pertanyaan soal spending, impulsif, goals, comfort level, dan risk appetite.",
         accent: BudgetinPalette.coral,
         accentSoft: theme.onboarding.quizBlobSoft,
@@ -44,7 +44,7 @@ export function OnboardingView() {
       },
       {
         art: "gold",
-        title: "Emas juga ikut ke-plan.",
+        title: "EMAS JUGA IKUT KE-PLAN.",
         copy: "Track gram Antam, UBS, atau perhiasan. Goal bisa berbentuk uang maupun target gram.",
         accent: BudgetinPalette.violet,
         accentSoft: theme.onboarding.goldBlobSoft,
@@ -155,13 +155,27 @@ export function OnboardingView() {
 
         {isWide ? (
           <View style={styles.brandPanel}>
-            <View style={[styles.brandPill, { backgroundColor: theme.onboarding.brandPill }]}>
-              <View style={[styles.brandDot, { backgroundColor: theme.text.primary }]} />
-              <Text style={[styles.brandPillText, { color: theme.text.secondary }]}>
+            <View
+              style={[
+                styles.brandPill,
+                { backgroundColor: theme.onboarding.brandPill },
+              ]}
+            >
+              <View
+                style={[
+                  styles.brandDot,
+                  { backgroundColor: theme.text.primary },
+                ]}
+              />
+              <Text
+                style={[styles.brandPillText, { color: theme.text.secondary }]}
+              >
                 Budgetin onboarding
               </Text>
             </View>
-            <Text style={[styles.brandTitle, { color: theme.text.primary }]}>Budgetin</Text>
+            <Text style={[styles.brandTitle, { color: theme.text.primary }]}>
+              Budgetin
+            </Text>
             <Text style={[styles.brandCopy, { color: theme.text.secondary }]}>
               Onboarding ini mengikuti prototype HTML kamu, tapi dibangun ulang
               dengan pola layout native supaya lebih nyaman dipelajari di Expo
@@ -255,8 +269,14 @@ export function OnboardingView() {
                 <View style={styles.mainContent}>
                   <OnboardingHeroArt slide={item} theme={theme} />
                   <View style={styles.textBlock}>
-                    <Text style={[styles.title, { color: theme.text.primary }]}>{item.title}</Text>
-                    <Text style={[styles.copy, { color: theme.text.secondary }]}>{item.copy}</Text>
+                    <Text style={[styles.title, { color: theme.text.primary }]}>
+                      {item.title}
+                    </Text>
+                    <Text
+                      style={[styles.copy, { color: theme.text.secondary }]}
+                    >
+                      {item.copy}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -424,19 +444,23 @@ const styles = StyleSheet.create({
   },
   textBlock: {
     alignItems: "flex-start",
-    gap: 14,
+    gap: 4,
     paddingHorizontal: 8,
+    paddingVertical: 12,
   },
   title: {
-    fontSize: 38,
-    lineHeight: 42,
-    fontWeight: "800",
-    letterSpacing: -1,
+    fontFamily: Fonts.display,
+    fontSize: 48,
+    lineHeight: 52,
+    letterSpacing: -1.2,
+    paddingBottom: 4,
     textAlign: "left",
   },
   copy: {
+    fontFamily: Fonts.body,
     fontSize: 16,
     lineHeight: 25,
+    letterSpacing: -0.3,
     textAlign: "left",
     maxWidth: 320,
   },

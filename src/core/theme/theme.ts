@@ -120,6 +120,9 @@ export const Fonts = Platform.select({
   ios: {
     /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: 'system-ui',
+    /** Built-in display face */
+    display: 'Impact',
+    body: 'DMSans_700Bold',
     /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: 'ui-serif',
     /** iOS `UIFontDescriptorSystemDesignRounded` */
@@ -129,12 +132,16 @@ export const Fonts = Platform.select({
   },
   default: {
     sans: 'normal',
+    display: 'sans-serif-black',
+    body: 'DMSans_700Bold',
     serif: 'serif',
     rounded: 'normal',
     mono: 'monospace',
   },
   web: {
     sans: 'var(--font-display)',
+    display: 'Impact, "Arial Black", sans-serif',
+    body: 'DMSans_700Bold',
     serif: 'var(--font-serif)',
     rounded: 'var(--font-rounded)',
     mono: 'var(--font-mono)',

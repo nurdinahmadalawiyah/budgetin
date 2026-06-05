@@ -1,6 +1,12 @@
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {
+  DMSans_400Regular,
+  DMSans_500Medium,
+  DMSans_700Bold,
+} from '@expo-google-fonts/dm-sans';
 
 import { AnimatedSplashOverlay } from '@/core/components/animated-icon';
 import { initializeDatabase } from '@/core/database';
@@ -8,6 +14,11 @@ import { useAppStore } from '@/core/store';
 import { appLogger } from '@/core/utils';
 
 export default function RootLayout() {
+  const [fontsLoaded, fontsError] = useFonts({
+    DMSans_400Regular,
+    DMSans_500Medium,
+    DMSans_700Bold,
+  });
   const failBootstrap = useAppStore((state) => state.failBootstrap);
   const finishBootstrap = useAppStore((state) => state.finishBootstrap);
   const startBootstrap = useAppStore((state) => state.startBootstrap);
@@ -36,6 +47,10 @@ export default function RootLayout() {
       isMounted = false;
     };
   }, [failBootstrap, finishBootstrap, startBootstrap]);
+
+  if (!fontsLoaded && !fontsError) {
+    return null;
+  }
 
   return (
     <SafeAreaProvider>
