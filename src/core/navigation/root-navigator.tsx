@@ -1,34 +1,68 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { AppTabs } from '@/core/navigation/app-tabs';
-import { RootStackParamList } from '@/core/navigation/types';
-import { useHasActiveSession, useHasCompletedOnboarding } from '@/core/store';
-import { AuthScreen } from '@/screens/auth-screen';
-import { OnboardingScreen } from '@/screens/onboarding-screen';
+import { AppTabs } from "@/core/navigation/app-tabs";
+import { RootStackParamList } from "@/core/navigation/types";
+import {
+  useAppStore,
+  useHasActiveSession,
+  useHasCompletedOnboarding,
+} from "@/core/store";
+import { AuthView } from "@/features/auth/presentation/views/auth-view";
+import { OnboardingView } from "@/features/onboarding/presentation/views/onboarding-view";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function RootNavigator() {
   const hasCompletedOnboarding = useHasCompletedOnboarding();
   const hasActiveSession = useHasActiveSession();
-
-  const initialRouteName = !hasCompletedOnboarding
-    ? 'Onboarding'
-    : hasActiveSession
-      ? 'MainTabs'
-      : 'Auth';
+  const setHasCompletedOnboarding = useAppStore(
+    (state) => state.setHasCompletedOnboarding,
+  );
+  const signInAsGuest = useAppStore((state) => state.signInAsGuest);
+  const signInWithGoogle = useAppStore((state) => state.signInWithGoogle);
 
   return (
     <Stack.Navigator
-      initialRouteName={initialRouteName}
-      screenOptions={{ headerShown: false }}>
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       {!hasCompletedOnboarding ? (
-        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+        <Stack.Group navigationKey="onboarding-flow">
+          <Stack.Screen name="Onboarding">
+            {() => (
+              <OnboardingView
+                onFinish={() => {
+                  setHasCompletedOnboarding(true);
+                }}
+              />
+            )}
+          </Stack.Screen>
+        </Stack.Group>
       ) : null}
+
       {hasCompletedOnboarding && !hasActiveSession ? (
-        <Stack.Screen name="Auth" component={AuthScreen} />
+        <Stack.Group navigationKey="auth-flow">
+          <Stack.Screen name="Auth">
+            {() => (
+              <AuthView
+                onContinueAsGuest={() => {
+                  signInAsGuest();
+                }}
+                onContinueWithGoogle={() => {
+                  signInWithGoogle();
+                }}
+              />
+            )}
+          </Stack.Screen>
+        </Stack.Group>
       ) : null}
-      <Stack.Screen name="MainTabs" component={AppTabs} />
+
+      {hasCompletedOnboarding && hasActiveSession ? (
+        <Stack.Group navigationKey="app-flow">
+          <Stack.Screen name="MainTabs" component={AppTabs} />
+        </Stack.Group>
+      ) : null}
     </Stack.Navigator>
   );
 }

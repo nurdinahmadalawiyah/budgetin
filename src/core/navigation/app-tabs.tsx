@@ -1,10 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { AppIcon } from '@/core/components/ui/app-icon';
-import { Colors } from '@/core/theme/theme';
 import { MainTabParamList } from '@/core/navigation/types';
-import { ExploreScreen } from '@/screens/explore-screen';
-import { HomeScreen } from '@/screens/home-screen';
+import { Colors } from '@/core/theme/theme';
+import { ExploreView } from '@/features/explore/presentation/views/explore-view';
+import { HomeView } from '@/features/home/presentation/views/home-view';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -26,7 +26,7 @@ export function AppTabs() {
       }}>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeView}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
             <AppIcon
@@ -41,7 +41,7 @@ export function AppTabs() {
       />
       <Tab.Screen
         name="Explore"
-        component={ExploreScreen}
+        component={ExploreView}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
             <AppIcon

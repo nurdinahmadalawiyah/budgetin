@@ -1,229 +1,239 @@
-# Architecture Guidelines: Feature-Driven Clean Architecture in Expo
+# Architecture Guidelines: Budgetin Current State
 
-Dokumen ini berisi panduan, struktur folder, dan aturan main penerapan **Clean Architecture berbasis Fitur/Modul** (_Feature-Driven Clean Architecture_) di dalam ekosistem **React Native + Expo Router**.
+Dokumen ini menjelaskan **realita arsitektur project Budgetin saat ini**, bukan target ideal template lain.
 
----
+Project ini sekarang memakai:
 
-## 📌 Prinsip Utama: The Dependency Rule
-
-Arsitektur ini membagi kode ke dalam modul-modul independen berdasarkan fitur bisnis. Setiap fitur memiliki batasan lapisan (_layer_) yang ketat.
-
-> **Aturan Emas:** lapisan dalam (**Domain**) tidak boleh mengetahui apa pun tentang lapisan luar (**Data** dan **Presentation**). Ketergantungan (_dependency_) hanya boleh mengarah ke dalam.
-
-```text
-[ Lapisan Terluar: Expo Router (app/) ]
-                  │
-                  ▼
-[ Presentation Layer (Views / ViewModels) ]
-                  │
-                  ▼
-[ Data Layer ]
-                  │
-                  ▼
-[ Lapisan Terinti: Domain Layer (Pure TS) ]
-```
+- **Expo SDK 56**
+- **React Navigation manual**, bukan Expo Router
+- **Feature-first folder structure**
+- **Presentation views** sebagai entry UI utama fitur
+- **Core layer** untuk shared infra seperti navigation, theme, store, database, dan network
 
 ---
 
-## 📂 Struktur Folder Global
+## Prinsip Utama
+
+Budgetin sedang bergerak ke arah **feature-driven architecture** dengan batas tanggung jawab yang jelas, tetapi implementasinya **belum sepenuhnya clean architecture penuh di semua fitur**.
+
+Aturan praktisnya:
+
+- kode dibagi berdasarkan fitur bisnis di `src/features/*`
+- shared concern masuk ke `src/core/*`
+- navigator langsung mengimpor `presentation/views` dari feature
+- `view` adalah entry point UI fitur
+- logic infra seperti navigation shell, store, database, dan network tidak disimpan di feature bila dipakai lintas fitur
+
+---
+
+## Struktur Folder Aktual
 
 ```text
 root/
-├── app/                             # EXPO ROUTER (Entry Point Navigasi)
-│   ├── _layout.tsx                  # Root Layout & Global Providers
-│   ├── index.tsx                    # Splash / Initial Redirect
-│   ├── (auth)/                      # Group Route: Fitur Autentikasi
-│   │   ├── login.tsx                # Hanya memanggil View dari feature/auth
-│   │   └── register.tsx
-│   └── (main)/                      # Group Route: Fitur Utama (Tabs/Drawer)
-│       ├── _layout.tsx
-│       └── home.tsx                 # Hanya memanggil View dari feature/home
-│
-├── src/                             # CORE SOURCE CODE
-│   ├── core/                        # Shared Utilities & Konfigurasi Global
-│   │   ├── network/                 # HttpClient (Axios/Fetch), Interceptors
-│   │   ├── theme/                   # Design system (warna, font, spacing)
-│   │   └── utils/                   # Helper global (formatters, validators)
-│   │
-│   └── features/                    # Tempat modul / fitur berada
-│       └── [nama-fitur]/            # Contoh: auth, home, profile, dll.
-│           ├── data/                # DATA LAYER
-│           │   ├── datasources/     # Remote API & Local Storage/SQLite
-│           │   ├── models/          # DTO / JSON Mapping
-│           │   └── repositories/    # Implementasi Repository Interface
-│           │
-│           ├── domain/              # DOMAIN LAYER (Pure TypeScript)
-│           │   ├── entities/        # Core business models
-│           │   ├── repositories/    # Interface / kontrak repository
-│           │   └── usecases/        # Logika bisnis per aksi
-│           │
-│           └── presentation/        # PRESENTATION LAYER
-│               ├── components/      # Komponen UI lokal khusus fitur
-│               ├── viewmodels/      # State management / hooks logika UI
-│               └── views/           # Screen utama yang bersih dari business logic
+├── App.tsx
+├── app.json
+├── assets/
+├── src/
+│   ├── core/
+│   │   ├── components/
+│   │   │   ├── layout/
+│   │   │   └── ui/
+│   │   ├── database/
+│   │   ├── navigation/
+│   │   ├── network/
+│   │   ├── store/
+│   │   ├── theme/
+│   │   └── utils/
+│   ├── features/
+│   │   ├── auth/
+│   │   │   └── presentation/
+│   │   │       ├── components/
+│   │   │       └── views/
+│   │   ├── explore/
+│   │   │   └── presentation/
+│   │   │       └── views/
+│   │   ├── home/
+│   │   │   └── presentation/
+│   │   │       └── views/
+│   │   └── onboarding/
+│   │       ├── data/
+│   │       ├── domain/
+│   │       └── presentation/
+│   │           ├── components/
+│   │           ├── viewmodels/
+│   │           └── views/
+│   └── types/
+└── scripts/
 ```
 
----
+Catatan penting:
 
-## 🛠️ Penjelasan Lapisan per Fitur
-
-### 1. Domain Layer (`domain/`)
-
-Lapisan paling inti dan tidak boleh terkontaminasi oleh library eksternal, konfigurasi database, atau komponen UI Expo/React Native. Isinya harus murni TypeScript.
-
-Isi utama layer ini:
-
-- **Entities**  
-  Representasi objek bisnis utama yang digunakan di seluruh aplikasi.
-
-- **Repositories (Interface)**  
-  Kontrak yang menentukan fungsi apa saja yang harus disediakan oleh Data Layer.  
-  Contoh:
-
-  ```ts
-  login(email: string, password: string): Promise<User>;
-  ```
-
-- **Use Cases**  
-  Unit logika bisnis tunggal. Satu berkas hanya boleh menangani satu skenario aksi.  
-  Contoh:
-
-  ```text
-  LoginWithEmailUseCase.ts
-  ```
+- Tidak ada folder `app/` untuk routing.
+- Tidak ada lagi folder `src/screens/`.
+- Navigasi sekarang berada di `src/core/navigation/`.
+- Beberapa fitur sudah punya struktur `data/domain/presentation`, tetapi belum semua fitur berada pada level kedalaman yang sama.
 
 ---
 
-### 2. Data Layer (`data/`)
+## Peran Tiap Layer
 
-Layer ini bertanggung jawab penuh atas penyediaan dan manipulasi data.
+### 1. `src/core/`
 
-Isi utama layer ini:
+Tempat untuk concern yang dipakai lintas fitur.
 
-- **Data Sources**  
-  Tempat eksekusi network request seperti Axios/GraphQL atau akses penyimpanan lokal seperti SecureStore/AsyncStorage.
+Isi yang cocok di sini:
 
-- **Models**  
-  Kelas atau tipe data untuk memetakan response JSON dari API. Biasanya memiliki mapper dari **Model** ke **Entity**.
+- navigator
+- komponen shared
+- design tokens dan hooks theme
+- app store global
+- database service
+- network client
+- logger, helper, dan utilitas umum
 
-- **Repository Implementations**  
-  Kelas yang mengimplementasikan interface dari Domain Layer. Di sinilah keputusan dibuat: apakah data diambil dari remote API, local cache, atau kombinasi keduanya.
+Contoh dari project saat ini:
 
----
+- `src/core/navigation/root-navigator.tsx`
+- `src/core/components/layout/phone-shell.tsx`
+- `src/core/store/app.store.ts`
+- `src/core/database/database.service.ts`
 
-### 3. Presentation Layer (`presentation/`)
+### 2. `src/features/[feature]/presentation/`
 
-Layer ini menangani semua urusan tampilan dan interaksi pengguna.
+Tempat UI dan komponen yang spesifik untuk satu fitur.
 
-Isi utama layer ini:
+Isi yang cocok:
 
-- **Views**  
-  Komponen UI murni React Native. Tugasnya hanya menampilkan data dan melempar aksi pengguna ke ViewModel. Jangan taruh logic bercabang kompleks di sini.
+- `views/` untuk entry UI utama halaman fitur
+- `components/` untuk subkomponen lokal fitur
+- `viewmodels/` atau hooks UI bila fitur memang butuh
 
-- **ViewModels / Hooks**  
-  Menggunakan custom React Hooks seperti `use[Fitur]ViewModel.ts` untuk memegang state halaman, seperti loading, error, dan data. Layer ini juga berinteraksi dengan Use Cases dan mengisolasi logika UI dari komponen visual.
+Aturan saat ini:
 
-- **Components**  
-  Atom UI kecil yang hanya digunakan secara spesifik di dalam fitur tersebut.
+- navigator boleh langsung mengimpor komponen dari `presentation/views`
+- jika sebuah file hanya menjadi wrapper tipis dan cuma `return <SomeView />`, wrapper itu **tidak perlu dibuat**
 
----
+### 3. `src/features/[feature]/domain/`
 
-### 4. Expo Router Entry Point (`app/`)
+Tempat business model dan kontrak fitur bila fiturnya memang sudah cukup kompleks untuk membutuhkan lapisan domain.
 
-Folder `app/` bukan tempat untuk menulis komponen UI panjang atau logika bisnis. Folder ini murni untuk konfigurasi routing.
+Isi yang cocok:
 
-Aturan untuk folder `app/`:
+- entities
+- repository contracts
+- use cases
 
-- Setiap berkas di dalam `app/` hanya boleh mengimpor komponen View dari folder `src/features/[fitur]/presentation/views/` terkait.
-- Folder ini boleh digunakan untuk mengatur opsi navigasi visual seperti konfigurasi `<Stack.Screen>` atau `<Tabs.Screen>`, misalnya judul header, visibilitas navbar, dan konfigurasi navigasi lain.
+Catatan:
 
----
+- lapisan ini **sudah dipakai di onboarding**, tetapi **belum wajib** untuk semua fitur kecil
+- jangan memaksa semua fitur kecil langsung punya domain/data layer kalau belum ada kebutuhan nyata
 
-## 🔄 Alur Komunikasi Data: Data Flow
+### 4. `src/features/[feature]/data/`
 
-Ketika pengguna menekan tombol di aplikasi, alur datanya berjalan seperti ini:
+Tempat implementasi sumber data bila fitur sudah butuh pemisahan data yang nyata.
 
-```text
-User Tap Button
-      │
-      ▼
-View
-      │
-      ▼
-ViewModel
-      │
-      ▼
-Use Case
-      │
-      ▼
-Repository Interface (Domain)
-      │
-      ▼
-Repository Implementation (Data)
-      │
-      ▼
-Data Source (Remote / Local)
-      │
-      ▼
-Entity diterima ViewModel
-      │
-      ▼
-State berubah
-      │
-      ▼
-View melakukan render ulang
-```
+Isi yang cocok:
 
-Versi ringkas:
+- datasources
+- models/dto
+- repository implementations
 
-```text
-User Tap Button
-  → View
-  → ViewModel
-  → Use Case
-  → Repository Implementation / Data Source
-  → Entity kembali ke ViewModel
-  → State berubah
-  → View update UI
-```
+Catatan:
+
+- saat ini beberapa fondasi data masih berada di `src/core` karena dipakai global, misalnya database dan network client
+- nanti saat fitur bisnis tumbuh, data source spesifik fitur boleh dipindahkan ke bawah feature masing-masing
 
 ---
 
-## ⛔ Aturan Larangan: Strict Rules
+## Aturan Routing dan Navigation
 
-1. **Jangan import layer luar ke Domain Layer.**  
-   Dilarang keras melakukan import berkas dari `data/` atau `presentation/` ke dalam `domain/`.
+Budgetin saat ini memakai **React Navigation manual**.
 
-2. **Jangan fetching API langsung di UI.**  
-   Dilarang menulis inline API fetching seperti `axios.post` langsung di dalam komponen View atau ViewModel. Semua wajib melalui Data Source dan Repository.
+Aturan yang dipakai:
 
-3. **Folder `app/` harus tetap tipis.**  
-   Jika berkas di folder `app/` memiliki panjang lebih dari 30 baris kode di luar konfigurasi router/header, kemungkinan besar kodenya salah tempat dan harus dipindahkan ke folder `features/`.
+- semua konfigurasi navigator berada di `src/core/navigation/`
+- `root-navigator` dan `app-tabs` boleh langsung mengimpor `presentation/views`
+- auth flow dan onboarding flow dikendalikan oleh state store, bukan `replace()` manual
+- jika screen tree dirender secara conditional, biarkan navigator yang berpindah otomatis saat state berubah
 
-4. **Komponen reusable harus naik ke core.**  
-   Jika sebuah komponen UI digunakan oleh lebih dari dua fitur berbeda, pindahkan komponen tersebut ke `src/core/components/` sebagai Shared Component.
+Kenapa:
 
----
-
-## ✅ Checklist Implementasi Fitur Baru
-
-Gunakan checklist ini setiap kali membuat fitur baru. Biar tidak jadi arsitektur “niatnya clean, realitanya spaghetti enterprise edition”.
-
-- [ ] Buat folder fitur di `src/features/[nama-fitur]/`.
-- [ ] Definisikan entity di `domain/entities/`.
-- [ ] Buat repository interface di `domain/repositories/`.
-- [ ] Buat use case di `domain/usecases/`.
-- [ ] Buat model/DTO di `data/models/`.
-- [ ] Buat data source di `data/datasources/`.
-- [ ] Buat repository implementation di `data/repositories/`.
-- [ ] Buat ViewModel atau custom hook di `presentation/viewmodels/`.
-- [ ] Buat View utama di `presentation/views/`.
-- [ ] Hubungkan route di `app/` dengan mengimpor View dari fitur terkait.
+- ini lebih stabil untuk flow auth
+- transisi Android lebih halus
+- struktur feature tetap sederhana
 
 ---
 
-## 🧭 Kesimpulan
+## Penamaan Komponen
 
-Feature-Driven Clean Architecture membantu menjaga kode tetap modular, scalable, dan mudah dites. Setiap fitur memiliki batas yang jelas, sementara Dependency Rule memastikan business logic tetap aman dari detail teknis seperti UI, network, storage, atau routing.
+Gunakan aturan ini supaya konsisten:
 
-Kuncinya sederhana: **Domain tetap murni, Data mengurus sumber data, Presentation mengurus UI, dan `app/` hanya menjadi pintu masuk navigasi.**
+- `View` untuk entry UI utama fitur
+- `Component` untuk bagian UI kecil di dalam fitur
+- `PhoneShell`, `AppButton`, dan komponen reusable lain masuk ke `core/components`
+
+Aturan praktis:
+
+- jika komponen adalah halaman utama fitur dan dirender langsung oleh navigator, nama `*View` masih valid
+- jangan buat `*Screen` terpisah kecuali memang ada tanggung jawab adapter navigasi yang nyata
+
+---
+
+## Aturan Shared vs Feature
+
+Pindahkan sesuatu ke `core` bila:
+
+- dipakai oleh lebih dari satu fitur
+- bukan milik domain bisnis fitur tertentu
+- merupakan primitive layout, theme, atau infra
+
+Biarkan sesuatu tetap di feature bila:
+
+- hanya dipakai oleh satu fitur
+- warna, art, copy, atau komposisinya spesifik untuk fitur itu
+- dia bagian dari UI/UX khas flow fitur tersebut
+
+Contoh:
+
+- `PhoneShell` cocok di `core/components/layout`
+- `AuthHeroArt` tetap milik fitur `auth`
+- `OnboardingHeroArt` tetap milik fitur `onboarding`
+
+---
+
+## Larangan Praktis
+
+1. Jangan menambah wrapper `screen` tipis yang tidak punya tanggung jawab jelas.
+2. Jangan menaruh business logic fitur acak di `src/core/navigation`.
+3. Jangan hardcode brand color berulang-ulang bila sudah ada di `BudgetinPalette`.
+4. Jangan memasukkan komponen reusable lintas fitur ke dalam folder feature.
+5. Jangan memaksa semua fitur kecil langsung punya `domain/data/usecase` kalau belum benar-benar dibutuhkan.
+
+---
+
+## Checklist Fitur Baru
+
+Untuk fitur baru, pakai checklist ini:
+
+- [ ] Buat folder fitur di `src/features/[nama-fitur]/`
+- [ ] Mulai dari `presentation/views/` bila kebutuhan masih sederhana
+- [ ] Tambahkan `presentation/components/` jika UI fitur mulai pecah
+- [ ] Tambahkan `viewmodels/` atau hooks jika state/interaction mulai rumit
+- [ ] Tambahkan `domain/` bila business rules mulai nyata
+- [ ] Tambahkan `data/` bila fitur sudah punya data source spesifik
+- [ ] Hubungkan navigator langsung ke `presentation/views`
+- [ ] Naikkan komponen ke `src/core/components` bila mulai dipakai lintas fitur
+
+---
+
+## Kesimpulan
+
+Arsitektur Budgetin saat ini adalah:
+
+- **feature-first**
+- **React Navigation manual**
+- **direct import of feature views from navigator**
+- **core for shared infra**
+- **clean architecture diterapkan bertahap, bukan dipaksa penuh sekaligus**
+
+Tujuan dokumen ini sederhana: menjaga struktur project tetap jujur terhadap kondisi sekarang, sambil tetap memberi arah yang sehat untuk pertumbuhan fitur berikutnya.
