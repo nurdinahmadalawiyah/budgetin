@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   LayoutChangeEvent,
   PanResponder,
@@ -12,9 +12,10 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { PhoneShell } from "@/core/components/layout/phone-shell";
 import { AppButton } from "@/core/components/ui/app-button";
 import { useBudgetinTheme } from "@/core/theme/hooks/use-budgetin-theme";
-import { BudgetinPalette, Fonts } from "@/core/theme/theme";
+import { BudgetinPalette, Fonts, Spacing } from "@/core/theme/theme";
 import { OnboardingSlide } from "@/features/onboarding/presentation/components/onboarding-art.types";
 import { OnboardingHeroArt } from "@/features/onboarding/presentation/components/onboarding-hero-art";
 
@@ -60,27 +61,28 @@ export function OnboardingView({ onFinish }: OnboardingViewProps) {
   );
   const isLastSlide = index === slides.length - 1;
   const isWide = width >= 900;
-  const shellWidth = useMemo(() => {
-    if (width >= 1200) return 500;
-    if (width >= 900) return 460;
-    return undefined;
-  }, [width]);
-
   const handleCarouselLayout = (event: LayoutChangeEvent) => {
     setCarouselWidth(event.nativeEvent.layout.width);
   };
 
-  const goToSlide = (nextIndex: number) => {
-    const clampedIndex = Math.max(0, Math.min(slides.length - 1, nextIndex));
-    setIndex(clampedIndex);
+  const goToSlide = useCallback(
+    (nextIndex: number) => {
+      const clampedIndex = Math.max(0, Math.min(slides.length - 1, nextIndex));
+      setIndex(clampedIndex);
+    },
+    [slides.length],
+  );
 
-    if (carouselWidth > 0) {
-      scrollRef.current?.scrollTo({
-        x: clampedIndex * carouselWidth,
-        animated: true,
-      });
+  useEffect(() => {
+    if (carouselWidth <= 0) {
+      return;
     }
-  };
+
+    scrollRef.current?.scrollTo({
+      x: index * carouselWidth,
+      animated: true,
+    });
+  }, [carouselWidth, index]);
 
   const handleMomentumScrollEnd = (event: {
     nativeEvent: { contentOffset: { x: number } };
@@ -132,7 +134,7 @@ export function OnboardingView({ onFinish }: OnboardingViewProps) {
             },
           })
         : null,
-    [carouselWidth, index, slides.length],
+    [carouselWidth, goToSlide, index, slides.length],
   );
 
   return (
@@ -185,16 +187,11 @@ export function OnboardingView({ onFinish }: OnboardingViewProps) {
           ]}
         />
 
-        <View
-          style={[
-            styles.phoneShell,
-            isWide ? styles.phoneShellWide : styles.phoneShellCompact,
-            shellWidth ? { width: shellWidth } : null,
-            {
-              backgroundColor: "transparent",
-              boxShadow: isWide ? theme.onboarding.shadow : undefined,
-            },
-          ]}
+        <PhoneShell
+          compactStyle={styles.phoneShellCompact}
+          style={styles.phoneShell}
+          wideShadow={theme.onboarding.shadow}
+          wideStyle={styles.phoneShellWide}
         >
           <View style={styles.topBar}>
             <View style={styles.pageIndicatorRow}>
@@ -271,7 +268,7 @@ export function OnboardingView({ onFinish }: OnboardingViewProps) {
               onPress={handleRightPress}
             />
           </View>
-        </View>
+        </PhoneShell>
       </View>
     </>
   );
@@ -318,11 +315,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   phoneShell: {
-    alignSelf: "center",
     minHeight: 760,
-    width: "100%",
-    maxWidth: 430,
-    justifyContent: "space-between",
   },
   phoneShellCompact: {
     flex: 1,
@@ -373,7 +366,7 @@ const styles = StyleSheet.create({
   },
   textBlock: {
     alignItems: "flex-start",
-    gap: 4,
+    gap: Spacing.one,
     paddingHorizontal: 8,
     paddingVertical: 12,
   },
@@ -384,6 +377,7 @@ const styles = StyleSheet.create({
     letterSpacing: -1.2,
     paddingBottom: 4,
     textAlign: "left",
+    textTransform: "uppercase",
   },
   copy: {
     fontFamily: Fonts.body,

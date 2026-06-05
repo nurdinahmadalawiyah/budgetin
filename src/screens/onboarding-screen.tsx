@@ -6,12 +6,11 @@ import { OnboardingView } from '@/features/onboarding/presentation/views/onboard
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Onboarding'>;
 
-export function OnboardingScreen({ navigation }: Props) {
+export function OnboardingScreen(_: Props) {
   const setHasCompletedOnboarding = useAppStore((state) => state.setHasCompletedOnboarding);
 
   const handleFinish = () => {
     setHasCompletedOnboarding(true);
-    navigation.replace('MainTabs');
   };
 
   return <OnboardingView onFinish={handleFinish} />;

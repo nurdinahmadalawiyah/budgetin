@@ -27,8 +27,10 @@ export const Colors = {
 export const BudgetinPalette = {
   sage: '#D4DED9',
   ink: '#151515',
+  ivory: '#FFFFFF',
   coral: '#F06B61',
   violet: '#6C70F6',
+  iris: '#8D84F4',
   mint: '#9BD9E5',
   stone: '#A19F97',
   gold: '#D8B56A',

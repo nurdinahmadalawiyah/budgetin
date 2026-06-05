@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 import {
   ActivityIndicator,
   Platform,
@@ -8,19 +8,37 @@ import {
   Text,
   View,
   ViewStyle,
-} from 'react-native';
+} from "react-native";
 
-import { AppIcon, IconFamily, IconTone } from '@/core/components/ui/app-icon';
-import { BudgetinPalette, BudgetinTheme, Spacing } from '@/core/theme/theme';
+import { AppIcon, IconFamily, IconTone } from "@/core/components/ui/app-icon";
+import { BudgetinPalette, BudgetinTheme, Spacing } from "@/core/theme/theme";
 
-type ButtonTone = keyof typeof BudgetinPalette;
-type ButtonVariant = 'solid' | 'outline' | 'ghost' | 'text';
-type ButtonSize = 'sm' | 'md' | 'lg';
+type ButtonTone = keyof typeof BudgetinPalette | "ivory";
+type ButtonVariant = "solid" | "outline" | "ghost" | "text";
+type ButtonSize = "sm" | "md" | "lg";
 
 const sizeStyles = {
-  sm: { minHeight: 48, paddingHorizontal: 20, borderRadius: 24, fontSize: 16, lineHeight: 20 },
-  md: { minHeight: 56, paddingHorizontal: 24, borderRadius: 28, fontSize: 18, lineHeight: 22 },
-  lg: { minHeight: 72, paddingHorizontal: 32, borderRadius: 36, fontSize: 20, lineHeight: 24 },
+  sm: {
+    minHeight: 48,
+    paddingHorizontal: 20,
+    borderRadius: 24,
+    fontSize: 16,
+    lineHeight: 20,
+  },
+  md: {
+    minHeight: 56,
+    paddingHorizontal: 24,
+    borderRadius: 28,
+    fontSize: 18,
+    lineHeight: 22,
+  },
+  lg: {
+    minHeight: 72,
+    paddingHorizontal: 32,
+    borderRadius: 36,
+    fontSize: 20,
+    lineHeight: 24,
+  },
 } as const;
 
 const iconSizes = {
@@ -30,31 +48,48 @@ const iconSizes = {
 } as const;
 
 function getToneColor(tone: ButtonTone) {
+  if (tone === "ivory") return "#FFFFFF";
   return BudgetinPalette[tone];
 }
 
 function getReadableTextColor(tone: ButtonTone) {
-  return tone === 'sage' || tone === 'mint' || tone === 'stone'
+  return tone === "sage" ||
+    tone === "mint" ||
+    tone === "stone" ||
+    tone === "ivory"
     ? BudgetinTheme.text.primary
     : BudgetinTheme.text.inverted;
 }
 
 function getPressedFillColor(tone: ButtonTone) {
-  if (tone === 'ink') return 'rgba(21, 21, 21, 0.14)';
-  if (tone === 'sage') return 'rgba(212, 222, 217, 0.38)';
-  if (tone === 'mint') return 'rgba(155, 217, 229, 0.32)';
-  if (tone === 'stone') return 'rgba(161, 159, 151, 0.24)';
-  if (tone === 'coral') return 'rgba(240, 107, 97, 0.18)';
-  if (tone === 'violet') return 'rgba(108, 112, 246, 0.18)';
+  if (tone === "ink") return "rgba(21, 21, 21, 0.14)";
+  if (tone === "sage") return "rgba(212, 222, 217, 0.38)";
+  if (tone === "mint") return "rgba(155, 217, 229, 0.32)";
+  if (tone === "stone") return "rgba(161, 159, 151, 0.24)";
+  if (tone === "ivory") return "rgba(255, 255, 255, 0.72)";
+  if (tone === "coral") return "rgba(240, 107, 97, 0.18)";
+  if (tone === "violet") return "rgba(108, 112, 246, 0.18)";
 
   return BudgetinPalette[tone];
 }
 
 function getPressedTextColor(tone: ButtonTone) {
-  return tone === 'ink' ? BudgetinTheme.text.primary : BudgetinPalette[tone];
+  if (tone === "ink" || tone === "ivory") return BudgetinTheme.text.primary;
+  return BudgetinPalette[tone];
 }
 
-export type AppButtonProps = Omit<PressableProps, 'style'> & {
+function getGlowShadow(tone: ButtonTone) {
+  if (tone === "ink") return "0 18px 40px rgba(21, 21, 21, 0.22)";
+  if (tone === "sage") return "0 18px 40px rgba(212, 222, 217, 0.34)";
+  if (tone === "mint") return "0 18px 40px rgba(155, 217, 229, 0.32)";
+  if (tone === "stone") return "0 18px 40px rgba(161, 159, 151, 0.24)";
+  if (tone === "ivory") return "0 18px 40px rgba(255, 255, 255, 0.28)";
+  if (tone === "violet") return "0 18px 40px rgba(108, 112, 246, 0.30)";
+
+  return "0 18px 40px rgba(240, 107, 97, 0.28)";
+}
+
+export type AppButtonProps = Omit<PressableProps, "style"> & {
   children?: ReactNode;
   fullWidth?: boolean;
   glow?: boolean;
@@ -79,50 +114,52 @@ export function AppButton({
   glow = false,
   icon,
   iconColor,
-  iconFamily = 'ion',
+  iconFamily = "ion",
   iconLeft,
   iconRight,
   iconTone,
   loading = false,
-  size = 'lg',
+  size = "lg",
   style,
-  tone = 'coral',
-  variant = 'solid',
+  tone = "coral",
+  variant = "solid",
   ...pressableProps
 }: AppButtonProps) {
   const isDisabled = disabled || loading;
-  const hasLabel = children !== undefined && children !== null && children !== false;
+  const hasLabel =
+    children !== undefined && children !== null && children !== false;
   const isIconOnly = !hasLabel;
   const sizeStyle = sizeStyles[size];
   const iconSize = iconSizes[size];
   const toneColor = getToneColor(tone);
   const solidTextColor = getReadableTextColor(tone);
+  const glowShadow = getGlowShadow(tone);
   const pressedFillColor = getPressedFillColor(tone);
 
   const variantStyle =
-    variant === 'solid'
+    variant === "solid"
       ? {
           backgroundColor: toneColor,
           borderColor: toneColor,
           textColor: solidTextColor,
         }
-      : variant === 'outline'
+      : variant === "outline"
         ? {
-            backgroundColor: 'transparent',
+            backgroundColor: "transparent",
             borderColor: toneColor,
             textColor: toneColor,
           }
-        : variant === 'text'
+        : variant === "text"
           ? {
-              backgroundColor: 'transparent',
-              borderColor: 'transparent',
+              backgroundColor: "transparent",
+              borderColor: "transparent",
               textColor: toneColor,
             }
-        : {
-            backgroundColor: BudgetinTheme.surface.muted,
-            borderColor: 'transparent',
-            textColor: BudgetinTheme.text.primary,
-          };
+          : {
+              backgroundColor: BudgetinTheme.surface.muted,
+              borderColor: "transparent",
+              textColor: BudgetinTheme.text.primary,
+            };
   const resolvedPrefixIcon =
     iconLeft ??
     (icon ? (
@@ -131,16 +168,16 @@ export function AppButton({
         name={icon}
         size={iconSize}
         color={iconColor}
-        tone={iconTone ?? (variant === 'solid' ? 'inverted' : tone)}
+        tone={iconTone ?? (variant === "solid" ? "inverted" : (tone as IconTone))}
       />
     ) : null);
-  const isTextVariant = variant === 'text';
-  const usesNativeTextRipple = isTextVariant && Platform.OS === 'android';
+  const isTextVariant = variant === "text";
+  const usesNativeTextRipple = isTextVariant && Platform.OS === "android";
   const containerStyle: ViewStyle = {
     minHeight: sizeStyle.minHeight,
     minWidth: isIconOnly ? sizeStyle.minHeight : undefined,
     borderRadius: sizeStyle.borderRadius,
-    width: fullWidth ? '100%' : undefined,
+    width: fullWidth ? "100%" : undefined,
   };
 
   return (
@@ -148,10 +185,11 @@ export function AppButton({
       style={[
         styles.container,
         containerStyle,
-        glow && variant === 'solid' ? styles.glow : null,
+        glow && variant === "solid" ? { boxShadow: glowShadow } : null,
         isDisabled ? styles.disabled : null,
         style,
-      ]}>
+      ]}
+    >
       <Pressable
         android_ripple={
           usesNativeTextRipple
@@ -188,7 +226,8 @@ export function AppButton({
               : styles.pressed
             : null,
         ]}
-        {...pressableProps}>
+        {...pressableProps}
+      >
         {({ pressed }) => (
           <View style={styles.content}>
             {loading ? (
@@ -201,7 +240,9 @@ export function AppButton({
               />
             ) : (
               <>
-                {resolvedPrefixIcon ? <View style={styles.icon}>{resolvedPrefixIcon}</View> : null}
+                {resolvedPrefixIcon ? (
+                  <View style={styles.icon}>{resolvedPrefixIcon}</View>
+                ) : null}
                 {hasLabel ? (
                   <Text
                     style={[
@@ -214,11 +255,14 @@ export function AppButton({
                         fontSize: sizeStyle.fontSize,
                         lineHeight: sizeStyle.lineHeight,
                       },
-                    ]}>
+                    ]}
+                  >
                     {children}
                   </Text>
                 ) : null}
-                {iconRight ? <View style={styles.icon}>{iconRight}</View> : null}
+                {iconRight ? (
+                  <View style={styles.icon}>{iconRight}</View>
+                ) : null}
               </>
             )}
           </View>
@@ -230,29 +274,26 @@ export function AppButton({
 
 const styles = StyleSheet.create({
   container: {
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   base: {
-    alignItems: 'center',
+    alignItems: "center",
     borderWidth: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   content: {
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row",
     gap: Spacing.two,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   label: {
-    fontWeight: '800',
-    textAlign: 'center',
+    fontWeight: "800",
+    textAlign: "center",
   },
   icon: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  glow: {
-    boxShadow: '0 18px 40px rgba(240, 107, 97, 0.28)',
+    alignItems: "center",
+    justifyContent: "center",
   },
   pressed: {
     opacity: 0.9,

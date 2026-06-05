@@ -1,12 +1,17 @@
 import { createStore } from '@/core/store/create-store';
 
 export type AppBootstrapStatus = 'idle' | 'loading' | 'ready' | 'error';
+export type AppSessionMode = 'guest' | 'google' | null;
 
 type AppStoreState = {
   bootstrapError: string | null;
   bootstrapStatus: AppBootstrapStatus;
   hasCompletedOnboarding: boolean;
+  sessionMode: AppSessionMode;
   setHasCompletedOnboarding: (value: boolean) => void;
+  signInAsGuest: () => void;
+  signInWithGoogle: () => void;
+  signOut: () => void;
   startBootstrap: () => void;
   finishBootstrap: () => void;
   failBootstrap: (message: string) => void;
@@ -17,8 +22,18 @@ export const useAppStore = createStore<AppStoreState>('app-store', (set) => ({
   bootstrapError: null,
   bootstrapStatus: 'idle',
   hasCompletedOnboarding: false,
+  sessionMode: null,
   setHasCompletedOnboarding: (value) => {
     set({ hasCompletedOnboarding: value });
+  },
+  signInAsGuest: () => {
+    set({ sessionMode: 'guest' });
+  },
+  signInWithGoogle: () => {
+    set({ sessionMode: 'google' });
+  },
+  signOut: () => {
+    set({ sessionMode: null });
   },
   startBootstrap: () => {
     set({
@@ -61,4 +76,8 @@ export function useBootstrapError() {
 
 export function useHasCompletedOnboarding() {
   return useAppStore((state) => state.hasCompletedOnboarding);
+}
+
+export function useHasActiveSession() {
+  return useAppStore((state) => state.sessionMode !== null);
 }
