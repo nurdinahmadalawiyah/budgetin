@@ -1,56 +1,179 @@
-# Welcome to your Expo app 👋
+# Budgetin
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Budgetin adalah aplikasi budgeting berbasis Expo SDK 56 yang sedang dibangun untuk membantu pengguna mengatur cashflow, menentukan metode budgeting yang cocok, dan menyiapkan fondasi perencanaan finansial dari awal onboarding.
 
-## Get started
+Saat ini repo ini sudah memiliki:
 
-1. Install dependencies
+- flow onboarding 3 slide dengan ilustrasi custom
+- navigasi manual berbasis React Navigation
+- state global ringan dengan Zustand
+- bootstrap database lokal menggunakan `expo-sqlite`
+- fondasi API client berbasis Axios
+- dukungan Android, iOS, dan web
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Start the app
+- Expo `~56.0.8`
+- React `19.2.3`
+- React Native `0.85.3`
+- React Navigation `7`
+- Zustand
+- Axios
+- Expo SQLite
+- Expo Secure Store
+- Expo UI / Glass Effect / Symbols
 
-   ```bash
-   npx expo start
-   ```
+## Requirement
 
-In the output, you'll find options to open the app in a
+- Node.js LTS
+- npm
+- Xcode untuk iOS Simulator
+- Android Studio untuk Android Emulator
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Project ini mengikuti dokumentasi Expo versi SDK 56:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- [Expo SDK 56 docs](https://docs.expo.dev/versions/v56.0.0/)
 
-## Get a fresh project
+## Menjalankan Project
 
-When you're ready, run:
+1. Install dependency:
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Jalankan development server:
 
-### Other setup steps
+```bash
+npm run start
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+3. Buka target platform:
 
-## Learn more
+- `npm run ios`
+- `npm run android`
+- `npm run web`
 
-To learn more about developing your project with Expo, look at the following resources:
+Catatan:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- `npm run ios` dan `npm run android` akan menjalankan Expo dan membuka simulator/emulator bila environment native sudah siap.
+- Project ini memakai library native seperti `expo-sqlite` dan `expo-secure-store`, jadi pastikan environment Expo SDK 56 kamu sinkron.
 
-## Join the community
+## Environment Variables
 
-Join our community of developers creating universal apps.
+Beberapa modul sudah membaca environment variable berikut:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```env
+EXPO_PUBLIC_API_URL=https://your-api-url
+EXPO_PUBLIC_LOG_LEVEL=debug
+```
+
+Keterangan:
+
+- `EXPO_PUBLIC_API_URL` dipakai oleh API client di `src/core/network`.
+- `EXPO_PUBLIC_LOG_LEVEL` dipakai untuk kontrol level logging.
+
+Kalau `EXPO_PUBLIC_API_URL` belum diisi lalu ada request ke relative endpoint, aplikasi akan melempar error.
+
+## Struktur Project
+
+```text
+budgetin/
+├── App.tsx
+├── app.json
+├── assets/
+├── src/
+│   ├── core/
+│   │   ├── components/
+│   │   ├── database/
+│   │   ├── navigation/
+│   │   ├── network/
+│   │   ├── store/
+│   │   ├── theme/
+│   │   └── utils/
+│   ├── features/
+│   │   ├── explore/
+│   │   ├── home/
+│   │   └── onboarding/
+│   └── screens/
+└── scripts/
+```
+
+Ringkasnya:
+
+- `src/core` berisi fondasi aplikasi yang reusable.
+- `src/features` berisi implementasi per fitur.
+- `src/screens` menjadi adapter screen untuk navigator.
+- `App.tsx` menangani bootstrap font, database, dan root navigation.
+
+## Arsitektur
+
+Repo ini bergerak ke arah feature-driven architecture. Pola yang saat ini sudah terlihat:
+
+- UI utama fitur berada di `src/features/*/presentation/views`
+- navigator dipisah di `src/core/navigation`
+- state aplikasi dipusatkan di `src/core/store`
+- database dan network dipisah sebagai service layer di `src/core`
+
+Catatan penting: dokumen [INSTRUCTION.md](/Volumes/MobileDev/Projects/ExpoProject/budgetin/INSTRUCTION.md) masih menjelaskan target arsitektur yang lebih jauh, termasuk domain, data, dan presentation layer yang lebih ketat. Implementasi saat ini baru sebagian menuju struktur tersebut.
+
+## Flow Aplikasi Saat Ini
+
+1. App memuat font dan inisialisasi database SQLite.
+2. User yang belum menyelesaikan onboarding akan masuk ke screen onboarding.
+3. Setelah onboarding selesai, user diarahkan ke tab utama.
+4. Tab utama saat ini terdiri dari:
+   - `Home`
+   - `Explore`
+
+## Database
+
+Database lokal menggunakan `expo-sqlite` dengan nama:
+
+```text
+budgetin.db
+```
+
+Migration awal yang sudah tersedia:
+
+- membuat tabel `app_meta`
+- menyimpan `initialized_at` saat database pertama kali dibuat
+
+## Script
+
+- `npm run start` menjalankan Expo dev server
+- `npm run android` membuka Android target
+- `npm run ios` membuka iOS target
+- `npm run web` menjalankan versi web
+- `npm run lint` menjalankan Expo lint
+- `npm run reset-project` menjalankan script reset bawaan repo
+
+## Status Implementasi
+
+Yang sudah ada:
+
+- visual onboarding custom
+- dark theme dasar untuk app shell
+- bootstrap database
+- fondasi API client
+- navigasi tab + stack
+
+Yang masih terlihat sebagai placeholder:
+
+- konten `Home`
+- konten `Explore`
+- integrasi API bisnis
+- persistence auth token yang benar-benar terhubung ke flow login
+
+## File Penting
+
+- [App.tsx](/Volumes/MobileDev/Projects/ExpoProject/budgetin/App.tsx)
+- [app.json](/Volumes/MobileDev/Projects/ExpoProject/budgetin/app.json)
+- [package.json](/Volumes/MobileDev/Projects/ExpoProject/budgetin/package.json)
+- [src/core/navigation/root-navigator.tsx](/Volumes/MobileDev/Projects/ExpoProject/budgetin/src/core/navigation/root-navigator.tsx)
+- [src/core/database/database.service.ts](/Volumes/MobileDev/Projects/ExpoProject/budgetin/src/core/database/database.service.ts)
+- [src/features/onboarding/presentation/views/onboarding-view.tsx](/Volumes/MobileDev/Projects/ExpoProject/budgetin/src/features/onboarding/presentation/views/onboarding-view.tsx)
+
+## Lisensi
+
+Project ini mengikuti lisensi yang ada di file [LICENSE](/Volumes/MobileDev/Projects/ExpoProject/budgetin/LICENSE).
