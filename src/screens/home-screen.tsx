@@ -1,5 +1,5 @@
 import { HomeView } from '@/features/home/presentation/views/home-view';
 
-export default function HomeScreen() {
+export function HomeScreen() {
   return <HomeView />;
 }

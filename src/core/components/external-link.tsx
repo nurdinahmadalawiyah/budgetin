@@ -1,25 +1,34 @@
-import { Href, Link } from 'expo-router';
 import { openBrowserAsync, WebBrowserPresentationStyle } from 'expo-web-browser';
-import { type ComponentProps } from 'react';
+import { cloneElement, isValidElement, ReactElement, ReactNode } from 'react';
+import { Linking, Pressable } from 'react-native';
 
-type Props = Omit<ComponentProps<typeof Link>, 'href'> & { href: Href & string };
+type ExternalLinkProps = {
+  asChild?: boolean;
+  children: ReactNode;
+  href: string;
+};
 
-export function ExternalLink({ href, ...rest }: Props) {
-  return (
-    <Link
-      target="_blank"
-      {...rest}
-      href={href}
-      onPress={async (event) => {
-        if (process.env.EXPO_OS !== 'web') {
-          // Prevent the default behavior of linking to the default browser on native.
-          event.preventDefault();
-          // Open the link in an in-app browser.
-          await openBrowserAsync(href, {
-            presentationStyle: WebBrowserPresentationStyle.AUTOMATIC,
-          });
-        }
-      }}
-    />
-  );
+async function openExternalLink(href: string) {
+  if (process.env.EXPO_OS === 'web') {
+    await Linking.openURL(href);
+    return;
+  }
+
+  await openBrowserAsync(href, {
+    presentationStyle: WebBrowserPresentationStyle.AUTOMATIC,
+  });
+}
+
+export function ExternalLink({ asChild = false, children, href }: ExternalLinkProps) {
+  const handlePress = () => {
+    void openExternalLink(href);
+  };
+
+  if (asChild && isValidElement(children)) {
+    return cloneElement(children as ReactElement<{ onPress?: () => void }>, {
+      onPress: handlePress,
+    });
+  }
+
+  return <Pressable onPress={handlePress}>{children}</Pressable>;
 }

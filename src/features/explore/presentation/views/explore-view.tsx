@@ -59,16 +59,16 @@ export function ExploreView() {
         </ThemedView>
 
         <ThemedView style={styles.sectionsWrapper}>
-          <Collapsible title="File-based routing">
+          <Collapsible title="Manual navigation">
             <ThemedText type="small">
-              This app has two screens: <ThemedText type="code">src/app/index.tsx</ThemedText> and{' '}
-              <ThemedText type="code">src/app/explore.tsx</ThemedText>
+              This app defines screens manually in{' '}
+              <ThemedText type="code">src/core/navigation/root-navigator.tsx</ThemedText> and{' '}
+              <ThemedText type="code">src/core/navigation/app-tabs.tsx</ThemedText>.
             </ThemedText>
             <ThemedText type="small">
-              The layout file in <ThemedText type="code">src/app/_layout.tsx</ThemedText> sets up
-              the tab navigator.
+              Screen components live outside the navigator so flow and UI stay decoupled.
             </ThemedText>
-            <ExternalLink href="https://docs.expo.dev/router/introduction">
+            <ExternalLink href="https://reactnavigation.org/docs/getting-started">
               <ThemedText type="linkPrimary">Learn more</ThemedText>
             </ExternalLink>
           </Collapsible>

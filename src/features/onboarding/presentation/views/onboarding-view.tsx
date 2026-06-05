@@ -1,4 +1,3 @@
-import { router, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useMemo, useRef, useState } from "react";
 import {
@@ -17,7 +16,11 @@ import { BudgetinPalette, Fonts } from "@/core/theme/theme";
 import { OnboardingSlide } from "@/features/onboarding/presentation/components/onboarding-art.types";
 import { OnboardingHeroArt } from "@/features/onboarding/presentation/components/onboarding-hero-art";
 
-export function OnboardingView() {
+type OnboardingViewProps = {
+  onFinish: () => void;
+};
+
+export function OnboardingView({ onFinish }: OnboardingViewProps) {
   const [index, setIndex] = useState(0);
   const [carouselWidth, setCarouselWidth] = useState(0);
   const scrollRef = useRef<ScrollView>(null);
@@ -53,7 +56,6 @@ export function OnboardingView() {
     ],
     [theme],
   );
-  const slide = slides[index];
   const isLastSlide = index === slides.length - 1;
   const isWide = width >= 900;
   const shellWidth = useMemo(() => {
@@ -95,7 +97,7 @@ export function OnboardingView() {
       return;
     }
 
-    router.replace("/(tabs)");
+    onFinish();
   };
 
   const handleRightPress = () => {
@@ -104,12 +106,11 @@ export function OnboardingView() {
       return;
     }
 
-    router.replace("/(tabs)");
+    onFinish();
   };
 
   return (
     <>
-      <Stack.Screen options={{ headerShown: false }} />
       <StatusBar style={theme.statusBarStyle} />
 
       <View

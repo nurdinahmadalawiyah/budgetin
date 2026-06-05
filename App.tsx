@@ -1,4 +1,6 @@
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import 'react-native-gesture-handler';
+
+import { NavigationContainer, DarkTheme as NavigationDarkTheme } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -10,10 +12,23 @@ import {
 
 import { AnimatedSplashOverlay } from '@/core/components/animated-icon';
 import { initializeDatabase } from '@/core/database';
+import { RootNavigator } from '@/core/navigation/root-navigator';
 import { useAppStore } from '@/core/store';
 import { appLogger } from '@/core/utils';
 
-export default function RootLayout() {
+const appNavigationTheme = {
+  ...NavigationDarkTheme,
+  colors: {
+    ...NavigationDarkTheme.colors,
+    background: '#12100F',
+    border: '#2A2724',
+    card: '#1A1816',
+    primary: '#F06B61',
+    text: '#FFF6EC',
+  },
+} as const;
+
+export default function App() {
   const [fontsLoaded, fontsError] = useFonts({
     DMSans_400Regular,
     DMSans_500Medium,
@@ -54,13 +69,10 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <ThemeProvider value={DarkTheme}>
+      <NavigationContainer theme={appNavigationTheme}>
         <AnimatedSplashOverlay />
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="(tabs)" />
-        </Stack>
-      </ThemeProvider>
+        <RootNavigator />
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 }
