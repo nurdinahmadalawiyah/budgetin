@@ -2,6 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import { useMemo, useRef, useState } from "react";
 import {
   LayoutChangeEvent,
+  PanResponder,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -59,8 +61,8 @@ export function OnboardingView({ onFinish }: OnboardingViewProps) {
   const isLastSlide = index === slides.length - 1;
   const isWide = width >= 900;
   const shellWidth = useMemo(() => {
-    if (width >= 1200) return 440;
-    if (width >= 900) return 400;
+    if (width >= 1200) return 500;
+    if (width >= 900) return 460;
     return undefined;
   }, [width]);
 
@@ -109,6 +111,30 @@ export function OnboardingView({ onFinish }: OnboardingViewProps) {
     onFinish();
   };
 
+  const webPanResponder = useMemo(
+    () =>
+      Platform.OS === "web"
+        ? PanResponder.create({
+            onMoveShouldSetPanResponder: (_, gestureState) =>
+              Math.abs(gestureState.dx) > Math.abs(gestureState.dy) &&
+              Math.abs(gestureState.dx) > 8,
+            onPanResponderRelease: (_, gestureState) => {
+              const threshold = Math.max(48, carouselWidth * 0.14);
+
+              if (gestureState.dx <= -threshold && index < slides.length - 1) {
+                goToSlide(index + 1);
+                return;
+              }
+
+              if (gestureState.dx >= threshold && index > 0) {
+                goToSlide(index - 1);
+              }
+            },
+          })
+        : null,
+    [carouselWidth, index, slides.length],
+  );
+
   return (
     <>
       <StatusBar style={theme.statusBarStyle} />
@@ -126,101 +152,38 @@ export function OnboardingView({ onFinish }: OnboardingViewProps) {
         ]}
       >
         <View
-          pointerEvents="none"
           style={[
             styles.backgroundGlow,
             styles.backgroundGlowMint,
             {
-              backgroundColor: theme.onboarding.backgroundGlowMint,
-              boxShadow: `0 0 120px 36px ${theme.onboarding.backgroundGlowMint}`,
+              backgroundColor: "transparent",
+              boxShadow: `0 0 280px 118px ${theme.onboarding.backgroundGlowMint}`,
+              pointerEvents: "none",
             },
           ]}
         />
         <View
-          pointerEvents="none"
           style={[
             styles.backgroundGlow,
             styles.backgroundGlowViolet,
             {
-              backgroundColor: theme.onboarding.backgroundGlowViolet,
-              boxShadow: `0 0 140px 42px ${theme.onboarding.backgroundGlowViolet}`,
+              backgroundColor: "transparent",
+              boxShadow: `0 0 300px 128px ${theme.onboarding.backgroundGlowViolet}`,
+              pointerEvents: "none",
             },
           ]}
         />
         <View
-          pointerEvents="none"
           style={[
             styles.backgroundGlow,
             styles.backgroundGlowCoral,
             {
-              backgroundColor: theme.onboarding.backgroundGlowCoral,
-              boxShadow: `0 0 120px 34px ${theme.onboarding.backgroundGlowCoral}`,
+              backgroundColor: "transparent",
+              boxShadow: `0 0 280px 118px ${theme.onboarding.backgroundGlowCoral}`,
+              pointerEvents: "none",
             },
           ]}
         />
-
-        {isWide ? (
-          <View style={styles.brandPanel}>
-            <View
-              style={[
-                styles.brandPill,
-                { backgroundColor: theme.onboarding.brandPill },
-              ]}
-            >
-              <View
-                style={[
-                  styles.brandDot,
-                  { backgroundColor: theme.text.primary },
-                ]}
-              />
-              <Text
-                style={[styles.brandPillText, { color: theme.text.secondary }]}
-              >
-                Budgetin onboarding
-              </Text>
-            </View>
-            <Text style={[styles.brandTitle, { color: theme.text.primary }]}>
-              Budgetin
-            </Text>
-            <Text style={[styles.brandCopy, { color: theme.text.secondary }]}>
-              Onboarding ini mengikuti prototype HTML kamu, tapi dibangun ulang
-              dengan pola layout native supaya lebih nyaman dipelajari di Expo
-              Router.
-            </Text>
-            <View style={styles.paletteRow}>
-              <View
-                style={[
-                  styles.paletteSwatch,
-                  { backgroundColor: BudgetinPalette.sage },
-                ]}
-              />
-              <View
-                style={[
-                  styles.paletteSwatch,
-                  { backgroundColor: BudgetinPalette.ink },
-                ]}
-              />
-              <View
-                style={[
-                  styles.paletteSwatch,
-                  { backgroundColor: BudgetinPalette.coral },
-                ]}
-              />
-              <View
-                style={[
-                  styles.paletteSwatch,
-                  { backgroundColor: BudgetinPalette.violet },
-                ]}
-              />
-              <View
-                style={[
-                  styles.paletteSwatch,
-                  { backgroundColor: BudgetinPalette.mint },
-                ]}
-              />
-            </View>
-          </View>
-        ) : null}
 
         <View
           style={[
@@ -261,8 +224,10 @@ export function OnboardingView({ onFinish }: OnboardingViewProps) {
             showsHorizontalScrollIndicator={false}
             onMomentumScrollEnd={handleMomentumScrollEnd}
             onLayout={handleCarouselLayout}
+            scrollEnabled={Platform.OS !== "web"}
             style={styles.carousel}
             contentContainerStyle={styles.carouselContent}
+            {...(webPanResponder ? webPanResponder.panHandlers : {})}
           >
             {slides.map((item) => (
               <View
@@ -325,75 +290,32 @@ const styles = StyleSheet.create({
   backgroundGlow: {
     position: "absolute",
     borderRadius: 999,
-    opacity: 0.9,
+    opacity: 1,
   },
   backgroundGlowMint: {
-    width: 140,
-    height: 140,
-    left: 8,
-    top: 120,
+    width: 0,
+    height: 0,
+    left: 28,
+    top: 146,
   },
   backgroundGlowViolet: {
-    width: 150,
-    height: 150,
-    right: 40,
-    top: 70,
+    width: 0,
+    height: 0,
+    right: 66,
+    top: 92,
   },
   backgroundGlowCoral: {
-    width: 130,
-    height: 130,
-    right: 30,
-    bottom: 24,
+    width: 0,
+    height: 0,
+    right: 52,
+    bottom: 46,
   },
   screenContentCompact: {
     alignItems: "stretch",
   },
   screenContentWide: {
     alignItems: "center",
-    flexDirection: "row",
     justifyContent: "center",
-  },
-  brandPanel: {
-    maxWidth: 360,
-    gap: 18,
-  },
-  brandPill: {
-    alignSelf: "flex-start",
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 8,
-    borderRadius: 999,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-  },
-  brandDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 999,
-  },
-  brandPillText: {
-    fontSize: 13,
-    fontWeight: "600",
-  },
-  brandTitle: {
-    fontSize: 54,
-    lineHeight: 58,
-    fontWeight: "800",
-    letterSpacing: -1.6,
-  },
-  brandCopy: {
-    fontSize: 17,
-    lineHeight: 27,
-  },
-  paletteRow: {
-    flexDirection: "row",
-    gap: 10,
-    paddingTop: 12,
-  },
-  paletteSwatch: {
-    width: 28,
-    height: 28,
-    borderRadius: 999,
   },
   phoneShell: {
     alignSelf: "center",
@@ -411,10 +333,11 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   phoneShellWide: {
-    borderRadius: 38,
-    paddingHorizontal: 24,
-    paddingTop: 18,
-    paddingBottom: 24,
+    minHeight: 860,
+    borderRadius: 42,
+    paddingHorizontal: 28,
+    paddingTop: 22,
+    paddingBottom: 28,
   },
   topBar: {
     alignItems: "stretch",
