@@ -12,6 +12,7 @@ import {
 
 import { AnimatedSplashOverlay } from '@/core/components/animated-icon';
 import { initializeDatabase } from '@/core/database';
+import { I18nProvider } from '@/core/i18n';
 import { RootNavigator } from '@/core/navigation/root-navigator';
 import { useAppStore } from '@/core/store';
 import { appLogger } from '@/core/utils';
@@ -68,11 +69,13 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
-      <NavigationContainer theme={appNavigationTheme}>
-        <AnimatedSplashOverlay />
-        <RootNavigator />
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <I18nProvider>
+      <SafeAreaProvider>
+        <NavigationContainer theme={appNavigationTheme}>
+          <AnimatedSplashOverlay />
+          <RootNavigator />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </I18nProvider>
   );
 }

@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { useLocale } from '@/core/i18n';
 import { AppIcon } from '@/core/components/ui/app-icon';
 import { MainTabParamList } from '@/core/navigation/types';
 import { Colors } from '@/core/theme/theme';
@@ -10,6 +11,7 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export function AppTabs() {
   const colors = Colors.dark;
+  const { t } = useLocale();
 
   return (
     <Tab.Navigator
@@ -36,7 +38,7 @@ export function AppTabs() {
               size={size}
             />
           ),
-          title: 'Home',
+          title: t('tabs.home'),
         }}
       />
       <Tab.Screen
@@ -51,7 +53,7 @@ export function AppTabs() {
               size={size}
             />
           ),
-          title: 'Explore',
+          title: t('tabs.explore'),
         }}
       />
     </Tab.Navigator>

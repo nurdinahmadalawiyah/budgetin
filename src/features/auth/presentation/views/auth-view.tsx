@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { PhoneShell } from "@/core/components/layout/phone-shell";
+import { useLocale } from "@/core/i18n";
 import { AppButton } from "@/core/components/ui/app-button";
 import { useBudgetinTheme } from "@/core/theme/hooks/use-budgetin-theme";
 import { Fonts, Spacing } from "@/core/theme/theme";
@@ -20,6 +21,7 @@ export function AuthView({
 }: AuthViewProps) {
   const insets = useSafeAreaInsets();
   const theme = useBudgetinTheme();
+  const { t } = useLocale();
   const { width } = useWindowDimensions();
   const isWide = width >= 900;
 
@@ -84,11 +86,10 @@ export function AuthView({
             <View style={styles.footerSection}>
               <View style={styles.copyBlock}>
                 <Text style={[styles.title, { color: theme.text.primary }]}>
-                  MASUK DULU, YUK.
+                  {t("auth.title")}
                 </Text>
                 <Text style={[styles.copy, { color: theme.text.secondary }]}>
-                  Supaya template budget, goals, dan gold tracker kamu tersimpan
-                  rapi.
+                  {t("auth.subtitle")}
                 </Text>
               </View>
 
@@ -109,7 +110,7 @@ export function AuthView({
                 tone="ivory"
                 glow
               >
-                Continue with Google
+                {t("auth.continueWithGoogle")}
               </AppButton>
 
               <AppButton
@@ -118,7 +119,7 @@ export function AuthView({
                 size="sm"
                 tone="stone"
               >
-                Continue as guest
+                {t("auth.continueAsGuest")}
               </AppButton>
             </View>
           </View>

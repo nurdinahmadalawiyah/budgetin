@@ -1,8 +1,11 @@
 import { Platform, StyleSheet, Text, View } from "react-native";
 
+import { useLocale } from "@/core/i18n";
 import { BudgetinPalette, Fonts } from "@/core/theme/theme";
 
 export function AuthHeroArt() {
+  const { t } = useLocale();
+
   return (
     <View style={styles.wrap}>
       <View style={styles.glowCore} />
@@ -13,7 +16,9 @@ export function AuthHeroArt() {
         <View style={styles.badgeCurrency}>
           <Text style={styles.badgeCurrencyText}>Rp</Text>
         </View>
-        <Text style={styles.cardTitle}>SMART{"\n"}BUDGET</Text>
+        <Text style={styles.cardTitle}>
+          {t("auth.heroTitle").replace(" ", "\n")}
+        </Text>
         <View style={styles.progressTrack}>
           <View style={styles.progressFill} />
         </View>
