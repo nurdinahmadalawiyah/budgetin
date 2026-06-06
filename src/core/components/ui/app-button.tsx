@@ -150,16 +150,18 @@ export function AppButton({
             textColor: toneColor,
           }
         : variant === "text"
-          ? {
-              backgroundColor: "transparent",
-              borderColor: "transparent",
-              textColor: toneColor,
-            }
+        ? {
+            backgroundColor: "transparent",
+            borderColor: "transparent",
+            textColor: toneColor,
+          }
           : {
-              backgroundColor: BudgetinTheme.surface.muted,
-              borderColor: "transparent",
-              textColor: BudgetinTheme.text.primary,
-            };
+            backgroundColor: BudgetinTheme.surface.muted,
+            borderColor: "transparent",
+            textColor: BudgetinTheme.text.primary,
+          };
+  const resolvedIconColor =
+    iconColor ?? (variant === "solid" ? variantStyle.textColor : undefined);
   const resolvedPrefixIcon =
     iconLeft ??
     (icon ? (
@@ -167,8 +169,8 @@ export function AppButton({
         family={iconFamily}
         name={icon}
         size={iconSize}
-        color={iconColor}
-        tone={iconTone ?? (variant === "solid" ? "inverted" : (tone as IconTone))}
+        color={resolvedIconColor}
+        tone={iconTone ?? (variant === "solid" ? undefined : (tone as IconTone))}
       />
     ) : null);
   const isTextVariant = variant === "text";

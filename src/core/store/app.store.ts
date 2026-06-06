@@ -7,7 +7,9 @@ type AppStoreState = {
   bootstrapError: string | null;
   bootstrapStatus: AppBootstrapStatus;
   hasCompletedOnboarding: boolean;
+  hasCompletedInteractiveQuiz: boolean;
   sessionMode: AppSessionMode;
+  setHasCompletedInteractiveQuiz: (value: boolean) => void;
   setHasCompletedOnboarding: (value: boolean) => void;
   signInAsGuest: () => void;
   signInWithGoogle: () => void;
@@ -22,7 +24,11 @@ export const useAppStore = createStore<AppStoreState>('app-store', (set) => ({
   bootstrapError: null,
   bootstrapStatus: 'idle',
   hasCompletedOnboarding: false,
+  hasCompletedInteractiveQuiz: false,
   sessionMode: null,
+  setHasCompletedInteractiveQuiz: (value) => {
+    set({ hasCompletedInteractiveQuiz: value });
+  },
   setHasCompletedOnboarding: (value) => {
     set({ hasCompletedOnboarding: value });
   },
@@ -76,6 +82,10 @@ export function useBootstrapError() {
 
 export function useHasCompletedOnboarding() {
   return useAppStore((state) => state.hasCompletedOnboarding);
+}
+
+export function useHasCompletedInteractiveQuiz() {
+  return useAppStore((state) => state.hasCompletedInteractiveQuiz);
 }
 
 export function useHasActiveSession() {
