@@ -2,58 +2,17 @@ import { useEffect, useState } from "react";
 import { Animated, Platform, Pressable, StyleSheet, View } from "react-native";
 
 import {
+  budgetinGlassTintStyle,
+  createGlassCardStyles,
+  mixColors,
+  withOpacity,
+} from "@/core/theme/glass";
+import {
   BudgetinPalette,
   BudgetinThemeTokens,
   Fonts,
   Spacing,
 } from "@/core/theme/theme";
-
-function withOpacity(hexColor: string, opacity: number) {
-  const normalized = hexColor.replace("#", "");
-  const value =
-    normalized.length === 3
-      ? normalized
-          .split("")
-          .map((char) => char + char)
-          .join("")
-      : normalized;
-  const red = parseInt(value.slice(0, 2), 16);
-  const green = parseInt(value.slice(2, 4), 16);
-  const blue = parseInt(value.slice(4, 6), 16);
-
-  return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
-}
-
-function mixColors(firstHex: string, secondHex: string, ratio: number) {
-  const normalize = (hexColor: string) => {
-    const normalized = hexColor.replace("#", "");
-
-    return normalized.length === 3
-      ? normalized
-          .split("")
-          .map((char) => char + char)
-          .join("")
-      : normalized;
-  };
-  const first = normalize(firstHex);
-  const second = normalize(secondHex);
-  const blend = (start: number, end: number) =>
-    Math.round(start + (end - start) * ratio);
-  const red = blend(
-    parseInt(first.slice(0, 2), 16),
-    parseInt(second.slice(0, 2), 16),
-  );
-  const green = blend(
-    parseInt(first.slice(2, 4), 16),
-    parseInt(second.slice(2, 4), 16),
-  );
-  const blue = blend(
-    parseInt(first.slice(4, 6), 16),
-    parseInt(second.slice(4, 6), 16),
-  );
-
-  return `rgb(${red}, ${green}, ${blue})`;
-}
 
 type QuizOptionCardProps = {
   index: number;
@@ -135,10 +94,10 @@ export function QuizOptionCard({
       ]}
     >
       <View style={[styles.card]}>
-        <Animated.View style={[styles.backgroundLayer, { borderColor }]} />
+        <Animated.View style={[glassCardStyles.backgroundLayer, { borderColor }]} />
         <Animated.View
           style={[
-            styles.backgroundLayer,
+            glassCardStyles.backgroundLayer,
             styles.gradientLayer,
             gradientCardStyle,
             { opacity: selectedOpacity },
@@ -146,23 +105,23 @@ export function QuizOptionCard({
         />
         <Animated.View
           style={[
-            styles.backgroundLayer,
-            styles.glassFallbackLayer,
+            glassCardStyles.backgroundLayer,
+            glassCardStyles.baseLayer,
             { opacity: unselectedOpacity },
           ]}
         />
         <Animated.View
           style={[
-            styles.backgroundLayer,
-            styles.glassTintLayer,
+            glassCardStyles.backgroundLayer,
+            glassCardStyles.tintLayer,
             manualGlassTintStyle,
             { opacity: unselectedOpacity },
           ]}
         />
         <Animated.View
           style={[
-            styles.backgroundLayer,
-            styles.glassHighlightLayer,
+            glassCardStyles.backgroundLayer,
+            glassCardStyles.highlightLayer,
             { opacity: unselectedOpacity },
           ]}
         />
@@ -188,11 +147,9 @@ export function QuizOptionCard({
   );
 }
 
+const glassCardStyles = createGlassCardStyles(20);
+
 const styles = StyleSheet.create({
-  backgroundLayer: {
-    ...StyleSheet.absoluteFill,
-    borderRadius: 18,
-  },
   cardOuter: {
     borderRadius: 20,
     marginHorizontal: Spacing.half,
@@ -209,17 +166,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.three,
     position: "relative",
-  },
-  glassFallbackLayer: {
-    backgroundColor: withOpacity(BudgetinPalette.ivory, 0.07),
-    boxShadow: `inset 0 1px 0 ${withOpacity(BudgetinPalette.ivory, 0.12)}, inset 0 -1px 0 ${withOpacity(BudgetinPalette.ink, 0.12)}`,
-  },
-  glassHighlightLayer: {
-    backgroundColor: "transparent",
-    boxShadow: `inset 0 1px 0 ${withOpacity(BudgetinPalette.ivory, 0.08)}`,
-  },
-  glassTintLayer: {
-    backgroundColor: "transparent",
   },
   gradientLayer: {
     backgroundColor: BudgetinPalette.coral,
@@ -254,15 +200,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const manualGlassTintStyle =
-  Platform.OS === "web"
-    ? ({
-        backgroundImage: `linear-gradient(135deg, ${withOpacity(BudgetinPalette.ivory, 0.015)} 0%, ${withOpacity(BudgetinPalette.ivory, 0.03)} 48%, ${withOpacity(BudgetinPalette.ink, 0.015)} 100%)`,
-      } as const)
-    : ({
-        experimental_backgroundImage: `linear-gradient(135deg, ${withOpacity(BudgetinPalette.ivory, 0.015)} 0%, ${withOpacity(BudgetinPalette.ivory, 0.03)} 48%, ${withOpacity(BudgetinPalette.ink, 0.015)} 100%)`,
-      } as const);
-
 const gradientCardStyle =
   Platform.OS === "web"
     ? ({
@@ -271,3 +208,5 @@ const gradientCardStyle =
     : ({
         experimental_backgroundImage: `linear-gradient(90deg, ${mixColors(BudgetinPalette.coral, BudgetinPalette.ivory, 0.14)} 0%, ${BudgetinPalette.coral} 44%, ${mixColors(BudgetinPalette.coral, BudgetinPalette.ink, 0.12)} 100%)`,
       } as const);
+
+const manualGlassTintStyle = budgetinGlassTintStyle;
