@@ -4,54 +4,55 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AnimatedIcon } from '@/core/components/animated-icon';
 import { HintRow } from '@/core/components/hint-row';
+import { useLocale } from '@/core/i18n';
 import { ThemedText } from '@/core/components/themed-text';
 import { ThemedView } from '@/core/components/themed-view';
 import { WebBadge } from '@/core/components/web-badge';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/core/theme/theme';
 
-function getDevMenuHint() {
+function getDevMenuHint(
+  t: (scope: string, options?: Record<string, string | number | boolean | null | undefined>) => string,
+) {
   if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
+    return <ThemedText type="small">{t('home.devToolsWeb')}</ThemedText>;
   }
   if (Device.isDevice) {
     return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
+      <ThemedText type="small">{t('home.devToolsDevice')}</ThemedText>
     );
   }
   const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
+    <ThemedText type="small">{t('home.devToolsSimulator', { shortcut })}</ThemedText>
   );
 }
 
 export function HomeView() {
+  const { t } = useLocale();
+
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <ThemedView style={styles.heroSection}>
           <AnimatedIcon />
           <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
+            {t('home.title')}
           </ThemedText>
         </ThemedView>
 
         <ThemedText type="code" style={styles.code}>
-          get started
+          {t('home.getStarted')}
         </ThemedText>
 
         <ThemedView type="backgroundElement" style={styles.stepContainer}>
           <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/core/navigation/root-navigator.tsx</ThemedText>}
+            title={t('home.tryEditing')}
+            hint={<ThemedText type="code">{t('home.tryEditingHint')}</ThemedText>}
           />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
+          <HintRow title={t('home.devTools')} hint={getDevMenuHint(t)} />
           <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
+            title={t('home.freshStart')}
+            hint={<ThemedText type="code">{t('home.freshStartHint')}</ThemedText>}
           />
         </ThemedView>
 

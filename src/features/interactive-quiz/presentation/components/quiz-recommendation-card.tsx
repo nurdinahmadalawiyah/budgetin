@@ -5,6 +5,7 @@ import { BudgetinThemeTokens, Fonts } from "@/core/theme/theme";
 
 type QuizRecommendationCardProps = {
   description: string;
+  eyebrow: string;
   label: string;
   summary: string;
   theme: BudgetinThemeTokens;
@@ -12,6 +13,7 @@ type QuizRecommendationCardProps = {
 
 export function QuizRecommendationCard({
   description,
+  eyebrow,
   label,
   summary,
   theme,
@@ -40,7 +42,7 @@ export function QuizRecommendationCard({
           <AppIcon color="#FF8E86" family="feather" name="target" size={18} />
         </View>
         <View style={styles.headerText}>
-          <Text style={[styles.eyebrow, { color: "#FFB0AA" }]}>Rekomendasi metode</Text>
+          <Text style={[styles.eyebrow, { color: "#FFB0AA" }]}>{eyebrow}</Text>
           <Text style={[styles.label, { color: theme.text.primary }]}>{label}</Text>
         </View>
       </View>

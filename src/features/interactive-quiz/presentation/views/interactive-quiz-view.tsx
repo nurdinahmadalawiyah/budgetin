@@ -14,6 +14,7 @@ import { AppBar } from "@/core/components/layout/app-bar";
 import { PhoneShell } from "@/core/components/layout/phone-shell";
 import { AppButton } from "@/core/components/ui/app-button";
 import { AppIcon } from "@/core/components/ui/app-icon";
+import { useLocale } from "@/core/i18n";
 import { useAppStore } from "@/core/store";
 import { useBudgetinTheme } from "@/core/theme/hooks/use-budgetin-theme";
 import { BudgetinPalette, Fonts, Spacing } from "@/core/theme/theme";
@@ -34,201 +35,200 @@ type BudgetingMethod =
 type QuizOption = {
   key: string;
   method: BudgetingMethod;
-  subtitle: string;
-  title: string;
+  subtitleKey: string;
+  titleKey: string;
 };
 
 type QuizQuestion = {
   id: string;
   options: QuizOption[];
-  title: string;
+  titleKey: string;
 };
 
 type Recommendation = {
-  description: string;
-  label: string;
-  summary: string;
-  id: string;
+  descriptionKey: string;
+  labelKey: string;
+  summaryKey: string;
 };
 
 const questions: QuizQuestion[] = [
   {
     id: "expense-tracking",
-    title: "BAGAIMANA CARA KAMU BIASANYA MENGATUR PENGELUARAN?",
+    titleKey: "interactiveQuiz.questions.expenseTracking.title",
     options: [
       {
         key: "track-all",
         method: "zero-based",
-        subtitle: "Sadar arus pergi ke mana",
-        title: "Catat detail setiap pengeluaran",
+        subtitleKey: "interactiveQuiz.questions.expenseTracking.options.trackAll.subtitle",
+        titleKey: "interactiveQuiz.questions.expenseTracking.options.trackAll.title",
       },
       {
         key: "focus-biggest",
         method: "priority-based",
-        subtitle: "Lebih fokus ke prioritas besar",
-        title: "Bagi income ke kategori besar",
+        subtitleKey: "interactiveQuiz.questions.expenseTracking.options.focusBiggest.subtitle",
+        titleKey: "interactiveQuiz.questions.expenseTracking.options.focusBiggest.title",
       },
       {
         key: "allocate-all",
         method: "anti-impulse",
-        subtitle: "Kontrol penuh dari awal",
-        title: "Setiap rupiah harus ada alokasi",
+        subtitleKey: "interactiveQuiz.questions.expenseTracking.options.allocateAll.subtitle",
+        titleKey: "interactiveQuiz.questions.expenseTracking.options.allocateAll.title",
       },
       {
         key: "goal-first",
         method: "flexible",
-        subtitle: "Goal jadi pusat budgeting",
-        title: "Nabung khusus untuk tujuan",
+        subtitleKey: "interactiveQuiz.questions.expenseTracking.options.goalFirst.subtitle",
+        titleKey: "interactiveQuiz.questions.expenseTracking.options.goalFirst.title",
       },
       {
         key: "freedom-first",
         method: "freedom",
-        subtitle: "Long game mode",
-        title: "Hemat demi kebebasan finansial",
+        subtitleKey: "interactiveQuiz.questions.expenseTracking.options.freedomFirst.subtitle",
+        titleKey: "interactiveQuiz.questions.expenseTracking.options.freedomFirst.title",
       },
     ],
   },
   {
     id: "promo-response",
-    title: "KALAU ADA PROMO ATAU FLASH SALE, BIASANYA KAMU...",
+    titleKey: "interactiveQuiz.questions.promoResponse.title",
     options: [
       {
         key: "rarely-tempted",
         method: "anti-impulse",
-        subtitle: "Disiplin itu kamu banget",
-        title: "Tahan diri, jarang tergoda",
+        subtitleKey: "interactiveQuiz.questions.promoResponse.options.rarelyTempted.subtitle",
+        titleKey: "interactiveQuiz.questions.promoResponse.options.rarelyTempted.title",
       },
       {
         key: "often-buy",
         method: "zero-based",
-        subtitle: "Budget detail bantu rem",
-        title: "Kadang tergoda, masih kontrol",
+        subtitleKey: "interactiveQuiz.questions.promoResponse.options.oftenBuy.subtitle",
+        titleKey: "interactiveQuiz.questions.promoResponse.options.oftenBuy.title",
       },
       {
         key: "very-tempted",
         method: "priority-based",
-        subtitle: "Butuh filter prioritas",
-        title: "Sering tergoda",
+        subtitleKey: "interactiveQuiz.questions.promoResponse.options.veryTempted.subtitle",
+        titleKey: "interactiveQuiz.questions.promoResponse.options.veryTempted.title",
       },
       {
         key: "compare-to-goal",
         method: "flexible",
-        subtitle: "Tujuan tetap nomor satu",
-        title: "Lihat dulu diarahkan ke goal",
+        subtitleKey: "interactiveQuiz.questions.promoResponse.options.compareToGoal.subtitle",
+        titleKey: "interactiveQuiz.questions.promoResponse.options.compareToGoal.title",
       },
       {
         key: "investment-first",
         method: "freedom",
-        subtitle: "Mindset future-first",
-        title: "Tidak tergoda, fokus investasi",
+        subtitleKey: "interactiveQuiz.questions.promoResponse.options.investmentFirst.subtitle",
+        titleKey: "interactiveQuiz.questions.promoResponse.options.investmentFirst.title",
       },
     ],
   },
   {
     id: "main-priority",
-    title: "APA PRIORITAS UTAMA KAMU SEKARANG?",
+    titleKey: "interactiveQuiz.questions.mainPriority.title",
     options: [
       {
         key: "daily-control",
         method: "zero-based",
-        subtitle: "Biar cepat kelihatan polanya",
-        title: "Kontrol cashflow harian",
+        subtitleKey: "interactiveQuiz.questions.mainPriority.options.dailyControl.subtitle",
+        titleKey: "interactiveQuiz.questions.mainPriority.options.dailyControl.title",
       },
       {
         key: "needs-vs-wants",
         method: "priority-based",
-        subtitle: "Mau hidup rapi tapi tetap enjoy",
-        title: "Balance kebutuhan dan keinginan",
+        subtitleKey: "interactiveQuiz.questions.mainPriority.options.needsVsWants.subtitle",
+        titleKey: "interactiveQuiz.questions.mainPriority.options.needsVsWants.title",
       },
       {
         key: "every-rupiah",
         method: "anti-impulse",
-        subtitle: "Tidak ada yang nganggur",
-        title: "Disiplin alokasi tiap rupiah",
+        subtitleKey: "interactiveQuiz.questions.mainPriority.options.everyRupiah.subtitle",
+        titleKey: "interactiveQuiz.questions.mainPriority.options.everyRupiah.title",
       },
       {
         key: "special-goals",
         method: "flexible",
-        subtitle: "Target spesifik dulu",
-        title: "Dana khusus nikah/gadget/liburan",
+        subtitleKey: "interactiveQuiz.questions.mainPriority.options.specialGoals.subtitle",
+        titleKey: "interactiveQuiz.questions.mainPriority.options.specialGoals.title",
       },
       {
         key: "long-term",
         method: "freedom",
-        subtitle: "Agresif mendorong aset",
-        title: "Kebebasan finansial jangka panjang",
+        subtitleKey: "interactiveQuiz.questions.mainPriority.options.longTerm.subtitle",
+        titleKey: "interactiveQuiz.questions.mainPriority.options.longTerm.title",
       },
     ],
   },
   {
     id: "comfort-style",
-    title: "KAMU LEBIH NYAMAN DENGAN METODE...",
+    titleKey: "interactiveQuiz.questions.comfortStyle.title",
     options: [
       {
         key: "simple-fast",
         method: "priority-based",
-        subtitle: "Tidak ribet",
-        title: "Sederhana dan cepat",
+        subtitleKey: "interactiveQuiz.questions.comfortStyle.options.simpleFast.subtitle",
+        titleKey: "interactiveQuiz.questions.comfortStyle.options.simpleFast.title",
       },
       {
         key: "detail-disciplined",
         method: "zero-based",
-        subtitle: "Checklist bikin tenang",
-        title: "Detail dan disiplin",
+        subtitleKey: "interactiveQuiz.questions.comfortStyle.options.detailDisciplined.subtitle",
+        titleKey: "interactiveQuiz.questions.comfortStyle.options.detailDisciplined.title",
       },
       {
         key: "every-rupiah-task",
         method: "anti-impulse",
-        subtitle: "Full allocation mode",
-        title: "Setiap rupiah ada tugas",
+        subtitleKey: "interactiveQuiz.questions.comfortStyle.options.everyRupiahTask.subtitle",
+        titleKey: "interactiveQuiz.questions.comfortStyle.options.everyRupiahTask.title",
       },
       {
         key: "goal-target",
         method: "flexible",
-        subtitle: "Goal-driven",
-        title: "Fleksibel tapi target jelas",
+        subtitleKey: "interactiveQuiz.questions.comfortStyle.options.goalTarget.subtitle",
+        titleKey: "interactiveQuiz.questions.comfortStyle.options.goalTarget.title",
       },
       {
         key: "future-extreme",
         method: "freedom",
-        subtitle: "Advanced mode",
-        title: "Hemat ekstrem demi masa depan",
+        subtitleKey: "interactiveQuiz.questions.comfortStyle.options.futureExtreme.subtitle",
+        titleKey: "interactiveQuiz.questions.comfortStyle.options.futureExtreme.title",
       },
     ],
   },
   {
     id: "financial-focus",
-    title: "FOKUS UTAMA KAMU DALAM KEUANGAN ADALAH...",
+    titleKey: "interactiveQuiz.questions.financialFocus.title",
     options: [
       {
         key: "cut-daily",
         method: "zero-based",
-        subtitle: "Mulai dari detail kecil",
-        title: "Mengurangi pengeluaran harian",
+        subtitleKey: "interactiveQuiz.questions.financialFocus.options.cutDaily.subtitle",
+        titleKey: "interactiveQuiz.questions.financialFocus.options.cutDaily.title",
       },
       {
         key: "short-goal",
         method: "flexible",
-        subtitle: "Progress terasa cepat",
-        title: "Nabung untuk tujuan pendek",
+        subtitleKey: "interactiveQuiz.questions.financialFocus.options.shortGoal.subtitle",
+        titleKey: "interactiveQuiz.questions.financialFocus.options.shortGoal.title",
       },
       {
         key: "balance-life",
         method: "priority-based",
-        subtitle: "Stabil dulu",
-        title: "Menyeimbangkan hidup dan tabungan",
+        subtitleKey: "interactiveQuiz.questions.financialFocus.options.balanceLife.subtitle",
+        titleKey: "interactiveQuiz.questions.financialFocus.options.balanceLife.title",
       },
       {
         key: "full-control",
         method: "anti-impulse",
-        subtitle: "Precision budgeting",
-        title: "Kontrol penuh setiap rupiah",
+        subtitleKey: "interactiveQuiz.questions.financialFocus.options.fullControl.subtitle",
+        titleKey: "interactiveQuiz.questions.financialFocus.options.fullControl.title",
       },
       {
         key: "passive-income",
         method: "freedom",
-        subtitle: "Financial freedom",
-        title: "Investasi besar untuk pensiun dini",
+        subtitleKey: "interactiveQuiz.questions.financialFocus.options.passiveIncome.subtitle",
+        titleKey: "interactiveQuiz.questions.financialFocus.options.passiveIncome.title",
       },
     ],
   },
@@ -236,43 +236,29 @@ const questions: QuizQuestion[] = [
 
 const recommendations: Record<BudgetingMethod, Recommendation> = {
   "anti-impulse": {
-    description:
-      "Setiap pemasukan langsung dibagi jelas: kebutuhan, tabungan, sinking fund, dan spending limit. Cocok buat kamu yang ingin rem impulsif lebih kuat.",
-    label: "Zero-Impulse Budget",
-    summary:
-      "Metode ini cocok kalau kamu tenang saat semua uang sudah punya tugas.",
-    id: "anti-impulse",
+    descriptionKey: "interactiveQuiz.recommendation.antiImpulse.description",
+    labelKey: "interactiveQuiz.recommendation.antiImpulse.label",
+    summaryKey: "interactiveQuiz.recommendation.antiImpulse.summary",
   },
   flexible: {
-    description:
-      "Fokus utama ada pada target yang sedang dikejar. Kategori harian tetap ada, tapi pengambilan keputusan selalu dikembalikan ke goal terdekat.",
-    label: "Goal-First Budget",
-    summary:
-      "Kamu terlihat nyaman kalau budgeting tetap luwes tapi tujuan besarnya jelas.",
-    id: "flexible",
+    descriptionKey: "interactiveQuiz.recommendation.flexible.description",
+    labelKey: "interactiveQuiz.recommendation.flexible.label",
+    summaryKey: "interactiveQuiz.recommendation.flexible.summary",
   },
   freedom: {
-    description:
-      "Budgeting dipakai untuk memperbesar porsi tabungan, investasi, dan runway hidup. Cocok kalau kamu rela hidup lebih lean demi percepatan target besar.",
-    label: "Freedom Builder",
-    summary: "Arahmu kuat ke aset dan kebebasan finansial jangka panjang.",
-    id: "freedom",
+    descriptionKey: "interactiveQuiz.recommendation.freedom.description",
+    labelKey: "interactiveQuiz.recommendation.freedom.label",
+    summaryKey: "interactiveQuiz.recommendation.freedom.summary",
   },
   "priority-based": {
-    description:
-      "Income dibagi ke beberapa bucket utama supaya keputusan belanja tetap ringan. Enak untuk dipakai konsisten tanpa merasa terlalu dikekang.",
-    label: "Priority Buckets",
-    summary:
-      "Kamu butuh sistem yang simpel, cepat dibaca, dan tetap menjaga keseimbangan hidup.",
-    id: "priority-based",
+    descriptionKey: "interactiveQuiz.recommendation.priorityBased.description",
+    labelKey: "interactiveQuiz.recommendation.priorityBased.label",
+    summaryKey: "interactiveQuiz.recommendation.priorityBased.summary",
   },
   "zero-based": {
-    description:
-      "Setiap rupiah diberi peran dari awal bulan supaya sisa uang bukan misteri. Cocok untuk kamu yang suka detail, kontrol, dan evaluasi rutin.",
-    label: "Zero-Based Budget",
-    summary:
-      "Kamu cenderung nyaman saat cashflow harian terlihat jelas dan terukur.",
-    id: "zero-based",
+    descriptionKey: "interactiveQuiz.recommendation.zeroBased.description",
+    labelKey: "interactiveQuiz.recommendation.zeroBased.label",
+    summaryKey: "interactiveQuiz.recommendation.zeroBased.summary",
   },
 };
 
@@ -313,6 +299,7 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
   const [showRecommendation, setShowRecommendation] = useState(false);
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const { t } = useLocale();
   const theme = useBudgetinTheme();
   const isWide = width >= 900;
   const question = questions[questionIndex];
@@ -320,7 +307,7 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
   const progress = (questionIndex + 1) / questions.length;
   const recommendation = useMemo(() => getRecommendation(answers), [answers]);
   const [progressAnimated] = useState(() => new Animated.Value(progress));
-  const setBudgetingMethod = useAppStore((state) => state.setBudgetingMethod);
+  const setBudgetingMethodLabelKey = useAppStore((state) => state.setBudgetingMethodLabelKey);
 
   useEffect(() => {
     Animated.timing(progressAnimated, {
@@ -355,24 +342,20 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
 
   const handleContinue = () => {
     if (showRecommendation) {
-      console.log("showRecommendation", showRecommendation);
-      setBudgetingMethod(recommendation.id);
+      setBudgetingMethodLabelKey(recommendation.labelKey);
       onFinish();
       return;
     }
 
     if (!selectedAnswerKey) {
-      console.log("selectedAnswerKey", selectedAnswerKey);
       return;
     }
 
     if (questionIndex === questions.length - 1) {
-      console.log("questionIndex === questions.length - 1", questionIndex === questions.length - 1);
       setShowRecommendation(true);
       return;
     }
 
-    console.log("setQuestionIndex", setQuestionIndex);
     setQuestionIndex((current) => current + 1);
   };
 
@@ -458,7 +441,10 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
                 <View style={styles.questionHeader}>
                   <View style={styles.questionPill}>
                     <Text style={styles.questionPillText}>
-                      Question {questionIndex + 1}/{questions.length}
+                      {t("interactiveQuiz.questionCounter", {
+                        current: questionIndex + 1,
+                        total: questions.length,
+                      })}
                     </Text>
                   </View>
 
@@ -468,7 +454,7 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
                       { color: theme.text.primary },
                     ]}
                   >
-                    {question.title}
+                    {t(question.titleKey)}
                   </Text>
                 </View>
 
@@ -481,9 +467,9 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
                       onPress={() => {
                         selectAnswer(option.key);
                       }}
-                      subtitle={option.subtitle}
+                      subtitle={t(option.subtitleKey)}
                       theme={theme}
-                      title={option.title}
+                      title={t(option.titleKey)}
                     />
                   ))}
                 </View>
@@ -498,7 +484,7 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
                         styles.questionPillTextCoral,
                       ]}
                     >
-                      Hasil quiz kamu
+                      {t("interactiveQuiz.recommendation.pill")}
                     </Text>
                   </View>
                   <Text
@@ -507,7 +493,7 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
                       { color: theme.text.primary },
                     ]}
                   >
-                    METODE BUDGETING YANG PALING COCOK BUAT KAMU.
+                    {t("interactiveQuiz.recommendation.title")}
                   </Text>
                   <Text
                     style={[
@@ -515,15 +501,15 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
                       { color: theme.text.secondary },
                     ]}
                   >
-                    Dari jawabanmu, ini pola yang paling nyambung untuk bantu
-                    atur cashflow tanpa terasa terlalu maksa.
+                    {t("interactiveQuiz.recommendation.intro")}
                   </Text>
                 </View>
 
                 <QuizRecommendationCard
-                  description={recommendation.description}
-                  label={recommendation.label}
-                  summary={recommendation.summary}
+                  description={t(recommendation.descriptionKey)}
+                  eyebrow={t("interactiveQuiz.recommendation.eyebrow")}
+                  label={t(recommendation.labelKey)}
+                  summary={t(recommendation.summaryKey)}
                   theme={theme}
                 />
               </View>
@@ -550,12 +536,12 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
               style={styles.ctaButton}
             >
               {showRecommendation
-                ? "Masuk ke App"
+                ? t("interactiveQuiz.cta.enterApp")
                 : questionIndex === questions.length - 1
-                  ? "Lihat rekomendasi"
+                  ? t("interactiveQuiz.cta.seeRecommendation")
                   : !selectedAnswerKey
-                    ? "Pilih jawaban dulu"
-                    : "Lanjut"}
+                    ? t("interactiveQuiz.cta.chooseAnswerFirst")
+                    : t("common.continue")}
             </AppButton>
           </View>
         </PhoneShell>

@@ -13,6 +13,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { PhoneShell } from "@/core/components/layout/phone-shell";
+import { useLocale } from "@/core/i18n";
 import { AppButton } from "@/core/components/ui/app-button";
 import { useBudgetinTheme } from "@/core/theme/hooks/use-budgetin-theme";
 import { BudgetinPalette, Fonts, Spacing } from "@/core/theme/theme";
@@ -29,35 +30,36 @@ export function OnboardingView({ onFinish }: OnboardingViewProps) {
   const scrollRef = useRef<ScrollView>(null);
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const { t } = useLocale();
   const theme = useBudgetinTheme();
   const slides: OnboardingSlide[] = useMemo(
     () => [
       {
         art: "cashflow",
-        title: "BUDGET KAMU, TAPI LEBIH WARAS.",
-        copy: "Catat cashflow, pilih metode budgeting yang cocok, lalu app bantu setup kategori otomatis dari income kamu.",
+        title: t("onboarding.slides.cashflow.title"),
+        copy: t("onboarding.slides.cashflow.copy"),
         accent: BudgetinPalette.coral,
         accentSoft: theme.onboarding.cashBlobSoft,
         accentMuted: theme.onboarding.cashTileMuted,
       },
       {
         art: "quiz",
-        title: "QUIZ DULU, BARU BUDGETING.",
-        copy: "Jawab 5 pertanyaan soal spending, impulsif, goals, comfort level, dan risk appetite.",
+        title: t("onboarding.slides.quiz.title"),
+        copy: t("onboarding.slides.quiz.copy"),
         accent: BudgetinPalette.violet,
         accentSoft: theme.onboarding.quizBlobSoft,
         accentMuted: theme.onboarding.quizChoiceMuted,
       },
       {
         art: "gold",
-        title: "EMAS JUGA IKUT KE-PLAN.",
-        copy: "Track gram Antam, UBS, atau perhiasan. Goal bisa berbentuk uang maupun target gram.",
+        title: t("onboarding.slides.gold.title"),
+        copy: t("onboarding.slides.gold.copy"),
         accent: BudgetinPalette.gold,
         accentSoft: theme.onboarding.goldBlobSoft,
         accentMuted: theme.onboarding.goldBarSmall,
       },
     ],
-    [theme],
+    [t, theme],
   );
   const isLastSlide = index === slides.length - 1;
   const isWide = width >= 900;
@@ -258,7 +260,7 @@ export function OnboardingView({ onFinish }: OnboardingViewProps) {
               tone="stone"
               onPress={handleLeftPress}
             >
-              {isLastSlide ? "Back" : "Skip"}
+              {isLastSlide ? t("common.back") : t("common.skip")}
             </AppButton>
 
             <AppButton

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     ScrollView,
     StyleSheet,
@@ -13,8 +13,8 @@ import { AppBar } from "@/core/components/layout/app-bar";
 import { PhoneShell } from "@/core/components/layout/phone-shell";
 import { AppButton } from "@/core/components/ui/app-button";
 import { AppIcon } from "@/core/components/ui/app-icon";
-import { BudgetingMethodRow, getBudgetingMethodById } from "@/core/database/services/budgeting-method-db.service";
-import { useAppStore, useBudgetingMethod, useHasCompletedInteractiveQuiz } from "@/core/store";
+import { useLocale } from "@/core/i18n";
+import { useAppStore, useBudgetingMethodLabelKey, useHasCompletedInteractiveQuiz } from "@/core/store";
 import { useBudgetinTheme } from "@/core/theme/hooks/use-budgetin-theme";
 import { BudgetinPalette, Fonts, Spacing } from "@/core/theme/theme";
 import { MonthlyIncomeCard } from "@/features/budget-preview/components/monthly-income-card";
@@ -25,26 +25,19 @@ type BudgetPreviewViewProps = {
 
 export function BudgetPreviewView({ onFinish }: BudgetPreviewViewProps) {
   const [income, setIncome] = useState(0);
-  const [methodDetail, setMethodDetail] = useState<BudgetingMethodRow | null>(null);
+
+  const { t } = useLocale();
 
   const hasCompletedInteractiveQuiz = useHasCompletedInteractiveQuiz();
   const setHasCompletedInteractiveQuiz = useAppStore(
     (state) => state.setHasCompletedInteractiveQuiz,
   );
-  const budgetingMethod = useBudgetingMethod();
+  const budgetingMethodLabelKey = useBudgetingMethodLabelKey();
 
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const theme = useBudgetinTheme();
   const isWide = width >= 900;
-
-  useEffect(() => {
-    if (budgetingMethod) {
-      getBudgetingMethodById(budgetingMethod).then((method) => {
-        setMethodDetail(method ?? null);
-      });
-    }
-  }, [budgetingMethod]);
 
   const handleContinue = () => {
     onFinish();
@@ -122,7 +115,7 @@ export function BudgetPreviewView({ onFinish }: BudgetPreviewViewProps) {
 
                 <Text style={[styles.supportingText, { color: theme.text.secondary }]}>
                   Biar auto-budget kamu pas, masukin dulu income bulanan. Metode kamu:{" "}
-                  <Text style={styles.textBold}>{methodDetail?.label}</Text>.
+                  <Text style={styles.textBold}>{t(budgetingMethodLabelKey ?? "")}</Text>.
                 </Text>
               </View>
 
