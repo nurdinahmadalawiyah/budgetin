@@ -36,6 +36,45 @@ export const BudgetinPalette = {
   gold: '#D8B56A',
 } as const;
 
+export const BudgetinProfileColors = {
+  recommendationCardBase: '#1F1B19',
+  antiImpulse: {
+    gradientStart: '#6FCB63',
+    gradientMiddle: '#2F6E35',
+    gradientEnd: '#12331C',
+    glow: 'rgba(118, 212, 106, 0.22)',
+    shadow: '0 28px 72px rgba(10, 28, 15, 0.42)',
+  },
+  flexible: {
+    gradientStart: '#D96AF3',
+    gradientMiddle: '#921FBA',
+    gradientEnd: '#24102F',
+    glow: 'rgba(192, 68, 255, 0.22)',
+    shadow: '0 28px 72px rgba(28, 8, 39, 0.42)',
+  },
+  freedom: {
+    gradientStart: '#FF6615',
+    gradientMiddle: '#CA1B00',
+    gradientEnd: '#321007',
+    glow: 'rgba(255, 114, 26, 0.22)',
+    shadow: '0 28px 72px rgba(39, 10, 6, 0.42)',
+  },
+  priorityBased: {
+    gradientStart: '#77B7FF',
+    gradientMiddle: '#3965A7',
+    gradientEnd: '#122340',
+    glow: 'rgba(118, 185, 255, 0.22)',
+    shadow: '0 28px 72px rgba(8, 18, 36, 0.42)',
+  },
+  zeroBased: {
+    gradientStart: '#F7C43C',
+    gradientMiddle: '#B98615',
+    gradientEnd: '#312109',
+    glow: 'rgba(248, 197, 62, 0.22)',
+    shadow: '0 28px 72px rgba(42, 28, 8, 0.44)',
+  },
+} as const;
+
 export const BudgetinThemes = {
   light: {
     brand: BudgetinPalette,
@@ -71,6 +110,56 @@ export const BudgetinThemes = {
       goldBarMedium: '#D8B56A',
       goldBarSmall: '#E8D5A1',
       goldPill: '#FBF4E1',
+    },
+    interactiveQuiz: {
+      recommendationCardBase: BudgetinProfileColors.recommendationCardBase,
+      profileVisuals: {
+        antiImpulse: {
+          glow: BudgetinProfileColors.antiImpulse.glow,
+          gradient: [
+            BudgetinProfileColors.antiImpulse.gradientStart,
+            BudgetinProfileColors.antiImpulse.gradientMiddle,
+            BudgetinProfileColors.antiImpulse.gradientEnd,
+          ],
+          shadow: BudgetinProfileColors.antiImpulse.shadow,
+        },
+        flexible: {
+          glow: BudgetinProfileColors.flexible.glow,
+          gradient: [
+            BudgetinProfileColors.flexible.gradientStart,
+            BudgetinProfileColors.flexible.gradientMiddle,
+            BudgetinProfileColors.flexible.gradientEnd,
+          ],
+          shadow: BudgetinProfileColors.flexible.shadow,
+        },
+        freedom: {
+          glow: BudgetinProfileColors.freedom.glow,
+          gradient: [
+            BudgetinProfileColors.freedom.gradientStart,
+            BudgetinProfileColors.freedom.gradientMiddle,
+            BudgetinProfileColors.freedom.gradientEnd,
+          ],
+          shadow: BudgetinProfileColors.freedom.shadow,
+        },
+        priorityBased: {
+          glow: BudgetinProfileColors.priorityBased.glow,
+          gradient: [
+            BudgetinProfileColors.priorityBased.gradientStart,
+            BudgetinProfileColors.priorityBased.gradientMiddle,
+            BudgetinProfileColors.priorityBased.gradientEnd,
+          ],
+          shadow: BudgetinProfileColors.priorityBased.shadow,
+        },
+        zeroBased: {
+          glow: BudgetinProfileColors.zeroBased.glow,
+          gradient: [
+            BudgetinProfileColors.zeroBased.gradientStart,
+            BudgetinProfileColors.zeroBased.gradientMiddle,
+            BudgetinProfileColors.zeroBased.gradientEnd,
+          ],
+          shadow: BudgetinProfileColors.zeroBased.shadow,
+        },
+      },
     },
     statusBarStyle: 'dark',
   },
@@ -108,6 +197,56 @@ export const BudgetinThemes = {
       goldBarMedium: '#D8B56A',
       goldBarSmall: '#8E7541',
       goldPill: '#312714',
+    },
+    interactiveQuiz: {
+      recommendationCardBase: BudgetinProfileColors.recommendationCardBase,
+      profileVisuals: {
+        antiImpulse: {
+          glow: BudgetinProfileColors.antiImpulse.glow,
+          gradient: [
+            BudgetinProfileColors.antiImpulse.gradientStart,
+            BudgetinProfileColors.antiImpulse.gradientMiddle,
+            BudgetinProfileColors.antiImpulse.gradientEnd,
+          ],
+          shadow: BudgetinProfileColors.antiImpulse.shadow,
+        },
+        flexible: {
+          glow: BudgetinProfileColors.flexible.glow,
+          gradient: [
+            BudgetinProfileColors.flexible.gradientStart,
+            BudgetinProfileColors.flexible.gradientMiddle,
+            BudgetinProfileColors.flexible.gradientEnd,
+          ],
+          shadow: BudgetinProfileColors.flexible.shadow,
+        },
+        freedom: {
+          glow: BudgetinProfileColors.freedom.glow,
+          gradient: [
+            BudgetinProfileColors.freedom.gradientStart,
+            BudgetinProfileColors.freedom.gradientMiddle,
+            BudgetinProfileColors.freedom.gradientEnd,
+          ],
+          shadow: BudgetinProfileColors.freedom.shadow,
+        },
+        priorityBased: {
+          glow: BudgetinProfileColors.priorityBased.glow,
+          gradient: [
+            BudgetinProfileColors.priorityBased.gradientStart,
+            BudgetinProfileColors.priorityBased.gradientMiddle,
+            BudgetinProfileColors.priorityBased.gradientEnd,
+          ],
+          shadow: BudgetinProfileColors.priorityBased.shadow,
+        },
+        zeroBased: {
+          glow: BudgetinProfileColors.zeroBased.glow,
+          gradient: [
+            BudgetinProfileColors.zeroBased.gradientStart,
+            BudgetinProfileColors.zeroBased.gradientMiddle,
+            BudgetinProfileColors.zeroBased.gradientEnd,
+          ],
+          shadow: BudgetinProfileColors.zeroBased.shadow,
+        },
+      },
     },
     statusBarStyle: 'light',
   },

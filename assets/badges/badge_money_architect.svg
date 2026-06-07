@@ -1,0 +1,59 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2a1f08"/>
+      <stop offset="100%" stop-color="#0d0a02"/>
+    </radialGradient>
+    <radialGradient id="glowCenter" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f0c040" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#f0c040" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Diamond (rotated square) shape -->
+  <polygon points="100,6 194,100 100,194 6,100"
+    fill="url(#bg)" stroke="#7a5a10" stroke-width="2"/>
+  <polygon points="100,6 194,100 100,194 6,100"
+    fill="url(#glowCenter)"/>
+
+  <!-- Inner diamond ring -->
+  <polygon points="100,20 180,100 100,180 20,100"
+    fill="none" stroke="#aa8020" stroke-width="1" opacity="0.5"/>
+
+  <!-- Blueprint grid (subtle) -->
+  <line x1="100" y1="22" x2="100" y2="178" stroke="#5a4010" stroke-width="0.6" opacity="0.4"/>
+  <line x1="22"  y1="100" x2="178" y2="100" stroke="#5a4010" stroke-width="0.6" opacity="0.4"/>
+  <line x1="50"  y1="50"  x2="150" y2="150" stroke="#5a4010" stroke-width="0.4" opacity="0.25"/>
+  <line x1="150" y1="50"  x2="50"  y2="150" stroke="#5a4010" stroke-width="0.4" opacity="0.25"/>
+
+  <!-- Classical building / temple icon -->
+  <g transform="translate(100,96)" filter="url(#glow)">
+    <!-- Pediment (roof triangle) -->
+    <polygon points="0,-46 50,-22 -50,-22"
+      fill="#f0c040" opacity="0.15" stroke="#f0c040" stroke-width="2.5" stroke-linejoin="round"/>
+
+    <!-- Frieze bar -->
+    <rect x="-52" y="-22" width="104" height="8" rx="2" fill="#f0c040"/>
+
+    <!-- 4 columns -->
+    <rect x="-42" y="-14" width="9" height="40" rx="4.5" fill="#f0c040"/>
+    <rect x="-15" y="-14" width="9" height="40" rx="4.5" fill="#f0c040"/>
+    <rect x="6"   y="-14" width="9" height="40" rx="4.5" fill="#f0c040"/>
+    <rect x="33"  y="-14" width="9" height="40" rx="4.5" fill="#f0c040"/>
+
+    <!-- Stylobate / base steps -->
+    <rect x="-54" y="26" width="108" height="7"  rx="2" fill="#d0a030"/>
+    <rect x="-58" y="33" width="116" height="7"  rx="2" fill="#b08020"/>
+    <rect x="-62" y="40" width="124" height="7"  rx="2" fill="#907010"/>
+  </g>
+
+  <!-- Corner vertex dots -->
+  <circle cx="100" cy="6"   r="4" fill="#aa8020"/>
+  <circle cx="194" cy="100" r="4" fill="#aa8020"/>
+  <circle cx="100" cy="194" r="4" fill="#aa8020"/>
+  <circle cx="6"   cy="100" r="4" fill="#aa8020"/>
+</svg>

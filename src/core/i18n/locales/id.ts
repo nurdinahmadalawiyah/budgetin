@@ -58,43 +58,38 @@ const id = {
     recommendation: {
       antiImpulse: {
         description:
-          'Setiap pemasukan langsung dibagi jelas: kebutuhan, tabungan, sinking fund, dan spending limit. Cocok buat kamu yang ingin rem impulsif lebih kuat.',
-        label: 'Zero-Impulse Budget',
-        summary:
-          'Metode ini cocok kalau kamu tenang saat semua uang sudah punya tugas.',
+          'Kamu butuh sistem pencatatan yang bikin sadar uang pergi ke mana, tanpa terasa seperti spreadsheet horor.',
+        label: 'THE ZEN ACCOUNTANT',
+        summary: 'Okane Kakeibo',
       },
-      eyebrow: 'Rekomendasi metode',
+      cta: 'Atur income bulanan',
+      eyebrow: 'FINANCIAL PROFILE MATCH',
       flexible: {
         description:
-          'Fokus utama ada pada target yang sedang dikejar. Kategori harian tetap ada, tapi pengambilan keputusan selalu dikembalikan ke goal terdekat.',
-        label: 'Goal-First Budget',
-        summary:
-          'Kamu terlihat nyaman kalau budgeting tetap luwes tapi tujuan besarnya jelas.',
+          'Kamu paling kuat saat uang diarahkan ke target spesifik: nikah, laptop, liburan, atau emergency fund.',
+        label: 'THE GOAL CRUSHER',
+        summary: 'Sinking Fund Strategy',
       },
       freedom: {
         description:
-          'Budgeting dipakai untuk memperbesar porsi tabungan, investasi, dan runway hidup. Cocok kalau kamu rela hidup lebih lean demi percepatan target besar.',
-        label: 'Freedom Builder',
-        summary:
-          'Arahmu kuat ke aset dan kebebasan finansial jangka panjang.',
+          'Kamu siap mode agresif: tekan pengeluaran, naikin saving rate, dan fokus kebebasan finansial.',
+        label: 'THE FREEDOM FIGHTER',
+        summary: 'FIRE Mode',
       },
-      intro:
-        'Dari jawabanmu, ini pola yang paling nyambung untuk bantu atur cashflow tanpa terasa terlalu maksa.',
-      pill: 'Hasil quiz kamu',
       priorityBased: {
         description:
-          'Income dibagi ke beberapa bucket utama supaya keputusan belanja tetap ringan. Enak untuk dipakai konsisten tanpa merasa terlalu dikekang.',
-        label: 'Priority Buckets',
-        summary:
-          'Kamu butuh sistem yang simpel, cepat dibaca, dan tetap menjaga keseimbangan hidup.',
+          'Kamu cocok dengan pembagian simpel: kebutuhan aman, lifestyle tetap hidup, tabungan jalan.',
+        label: 'THE BALANCED HARMONIST',
+        summary: '50/30/20 Rule',
       },
-      title: 'METODE BUDGETING YANG PALING COCOK BUAT KAMU.',
+      retry: 'Ulangi',
+      switchLabel: 'Ganti metode',
+      switchPrompt: 'Kurang cocok?',
       zeroBased: {
         description:
-          'Setiap rupiah diberi peran dari awal bulan supaya sisa uang bukan misteri. Cocok untuk kamu yang suka detail, kontrol, dan evaluasi rutin.',
-        label: 'Zero-Based Budget',
-        summary:
-          'Kamu cenderung nyaman saat cashflow harian terlihat jelas dan terukur.',
+          'Kamu suka kontrol penuh. Setiap rupiah akan punya tugas jelas sebelum sempat kabur ke checkout.',
+        label: 'THE MONEY ARCHITECT',
+        summary: 'Zero-Based Budgeting',
       },
     },
     questions: {

@@ -11,10 +11,14 @@ import {
 } from "react-native";
 
 import { AppIcon, IconFamily, IconTone } from "@/core/components/ui/app-icon";
+import {
+  budgetinGlassTintStyle,
+  createGlassCardStyles,
+} from "@/core/theme/glass";
 import { BudgetinPalette, BudgetinTheme, Spacing } from "@/core/theme/theme";
 
 type ButtonTone = keyof typeof BudgetinPalette | "ivory";
-type ButtonVariant = "solid" | "outline" | "ghost" | "text";
+type ButtonVariant = "solid" | "outline" | "ghost" | "text" | "glass";
 type ButtonSize = "sm" | "md" | "lg";
 
 const sizeStyles = {
@@ -45,6 +49,12 @@ const iconSizes = {
   sm: 18,
   md: 20,
   lg: 22,
+} as const;
+
+const glassButtonLayers = {
+  sm: createGlassCardStyles(sizeStyles.sm.borderRadius),
+  md: createGlassCardStyles(sizeStyles.md.borderRadius),
+  lg: createGlassCardStyles(sizeStyles.lg.borderRadius),
 } as const;
 
 function getToneColor(tone: ButtonTone) {
@@ -135,6 +145,8 @@ export function AppButton({
   const solidTextColor = getReadableTextColor(tone);
   const glowShadow = getGlowShadow(tone);
   const pressedFillColor = getPressedFillColor(tone);
+  const isGlassVariant = variant === "glass";
+  const glassLayers = glassButtonLayers[size];
 
   const variantStyle =
     variant === "solid"
@@ -149,12 +161,18 @@ export function AppButton({
             borderColor: toneColor,
             textColor: toneColor,
           }
-        : variant === "text"
+      : variant === "text"
         ? {
             backgroundColor: "transparent",
             borderColor: "transparent",
             textColor: toneColor,
           }
+        : variant === "glass"
+          ? {
+              backgroundColor: "transparent",
+              borderColor: "transparent",
+              textColor: BudgetinTheme.text.inverted,
+            }
           : {
             backgroundColor: BudgetinTheme.surface.muted,
             borderColor: "transparent",
@@ -192,6 +210,37 @@ export function AppButton({
         style,
       ]}
     >
+      {isGlassVariant ? (
+        <View
+          pointerEvents="none"
+          style={[
+            styles.glassLayerWrap,
+            {
+              borderRadius: sizeStyle.borderRadius,
+            },
+          ]}
+        >
+          <View
+            style={[
+              glassLayers.backgroundLayer,
+              glassLayers.baseLayer,
+            ]}
+          />
+          <View
+            style={[
+              glassLayers.backgroundLayer,
+              glassLayers.tintLayer,
+              budgetinGlassTintStyle,
+            ]}
+          />
+          <View
+            style={[
+              glassLayers.backgroundLayer,
+              glassLayers.highlightLayer,
+            ]}
+          />
+        </View>
+      ) : null}
       <Pressable
         android_ripple={
           usesNativeTextRipple
@@ -276,12 +325,17 @@ export function AppButton({
 
 const styles = StyleSheet.create({
   container: {
-    overflow: "hidden",
+    overflow: "visible",
+    position: "relative",
   },
   base: {
     alignItems: "center",
     borderWidth: 1,
     justifyContent: "center",
+  },
+  glassLayerWrap: {
+    ...StyleSheet.absoluteFill,
+    overflow: "hidden",
   },
   content: {
     alignItems: "center",

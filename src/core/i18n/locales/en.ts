@@ -57,43 +57,38 @@ const en = {
     recommendation: {
       antiImpulse: {
         description:
-          'Each income is split clearly into essentials, savings, sinking funds, and spending limits. Great if you want a stronger brake on impulse spending.',
-        label: 'Zero-Impulse Budget',
-        summary:
-          'This method fits you if you feel calm when every amount already has a job.',
+          'You need a mindful tracking system that helps you notice where money goes without feeling like horror-spreadsheet admin.',
+        label: 'THE ZEN ACCOUNTANT',
+        summary: 'Okane Kakeibo',
       },
-      eyebrow: 'Recommended method',
+      cta: 'Set monthly income',
+      eyebrow: 'FINANCIAL PROFILE MATCH',
       flexible: {
         description:
-          'The main focus stays on the goal you are currently chasing. Daily categories still exist, but decisions always return to your nearest goal.',
-        label: 'Goal-First Budget',
-        summary:
-          'You seem most comfortable when budgeting stays flexible but your big goal is clear.',
+          'You are strongest when money is aimed at a specific target: a wedding, laptop, trip, or emergency fund.',
+        label: 'THE GOAL CRUSHER',
+        summary: 'Sinking Fund Strategy',
       },
       freedom: {
         description:
-          'Budgeting is used to grow savings, investments, and your life runway. Great if you are willing to live leaner for faster progress toward a bigger target.',
-        label: 'Freedom Builder',
-        summary:
-          'Your direction leans strongly toward assets and long-term financial freedom.',
+          'You are ready for aggressive mode: cut spending, raise your saving rate, and stay locked on financial freedom.',
+        label: 'THE FREEDOM FIGHTER',
+        summary: 'FIRE Mode',
       },
-      intro:
-        'Based on your answers, this pattern fits best to help manage your cashflow without feeling too restrictive.',
-      pill: 'Your quiz result',
       priorityBased: {
         description:
-          'Income is split into a few main buckets so spending decisions stay light. Easy to use consistently without feeling overly constrained.',
-        label: 'Priority Buckets',
-        summary:
-          'You need a system that feels simple, quick to scan, and still keeps life balanced.',
+          'You fit a simple split: essentials protected, lifestyle still alive, savings still moving.',
+        label: 'THE BALANCED HARMONIST',
+        summary: '50/30/20 Rule',
       },
-      title: 'THE BUDGETING METHOD THAT FITS YOU BEST.',
+      retry: 'Retry',
+      switchLabel: 'Switch method',
+      switchPrompt: 'Not a fit?',
       zeroBased: {
         description:
-          'Every unit of money gets a role from the start of the month, so leftovers are never a mystery. Great if you like detail, control, and regular review.',
-        label: 'Zero-Based Budget',
-        summary:
-          'You tend to feel comfortable when daily cashflow is visible and measurable.',
+          'You love full control. Every rupiah gets a clear job before it has the chance to disappear into checkout.',
+        label: 'THE MONEY ARCHITECT',
+        summary: 'Zero-Based Budgeting',
       },
     },
     questions: {
