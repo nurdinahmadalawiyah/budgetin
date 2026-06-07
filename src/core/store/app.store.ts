@@ -8,9 +8,11 @@ type AppStoreState = {
   bootstrapStatus: AppBootstrapStatus;
   hasCompletedOnboarding: boolean;
   hasCompletedInteractiveQuiz: boolean;
+  hasCompletedBudgetPreview: boolean;
   sessionMode: AppSessionMode;
   setHasCompletedInteractiveQuiz: (value: boolean) => void;
   setHasCompletedOnboarding: (value: boolean) => void;
+  setHasCompletedBudgetPreview: (value: boolean) => void;
   signInAsGuest: () => void;
   signInWithGoogle: () => void;
   signOut: () => void;
@@ -18,6 +20,12 @@ type AppStoreState = {
   finishBootstrap: () => void;
   failBootstrap: (message: string) => void;
   resetBootstrap: () => void;
+  
+  /*
+  TODO: This is Temporary State, Must move to database if done development
+  */
+  budgetingMethodId: string | null;
+  setBudgetingMethodId: (value: string) => void;
 };
 
 export const useAppStore = createStore<AppStoreState>('app-store', (set) => ({
@@ -25,12 +33,16 @@ export const useAppStore = createStore<AppStoreState>('app-store', (set) => ({
   bootstrapStatus: 'idle',
   hasCompletedOnboarding: false,
   hasCompletedInteractiveQuiz: false,
+  hasCompletedBudgetPreview: false,
   sessionMode: null,
   setHasCompletedInteractiveQuiz: (value) => {
     set({ hasCompletedInteractiveQuiz: value });
   },
   setHasCompletedOnboarding: (value) => {
     set({ hasCompletedOnboarding: value });
+  },
+  setHasCompletedBudgetPreview: (value) => {
+    set({ hasCompletedBudgetPreview: value });
   },
   signInAsGuest: () => {
     set({ sessionMode: 'guest' });
@@ -65,6 +77,10 @@ export const useAppStore = createStore<AppStoreState>('app-store', (set) => ({
       bootstrapStatus: 'idle',
     });
   },
+  budgetingMethodId: null,
+  setBudgetingMethodId: (value) => {
+    set({ budgetingMethodId: value });
+  },
 }));
 
 export const appStore = {
@@ -88,6 +104,14 @@ export function useHasCompletedInteractiveQuiz() {
   return useAppStore((state) => state.hasCompletedInteractiveQuiz);
 }
 
+export function useHasCompletedBudgetPreview() {
+  return useAppStore((state) => state.hasCompletedBudgetPreview);
+}
+
 export function useHasActiveSession() {
   return useAppStore((state) => state.sessionMode !== null);
+}
+
+export function useBudgetingMethodId() {
+  return useAppStore((state) => state.budgetingMethodId);
 }

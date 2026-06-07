@@ -15,6 +15,7 @@ import { PhoneShell } from "@/core/components/layout/phone-shell";
 import { AppButton } from "@/core/components/ui/app-button";
 import { AppIcon } from "@/core/components/ui/app-icon";
 import { useLocale } from "@/core/i18n";
+import { useAppStore } from "@/core/store";
 import { useBudgetinTheme } from "@/core/theme/hooks/use-budgetin-theme";
 import { BudgetinPalette, Fonts, Spacing } from "@/core/theme/theme";
 import { QuizOptionCard } from "@/features/interactive-quiz/presentation/components/quiz-option-card";
@@ -365,6 +366,7 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
   const progress = (questionIndex + 1) / questions.length;
   const recommendation = useMemo(() => getRecommendation(answers), [answers]);
   const [progressAnimated] = useState(() => new Animated.Value(progress));
+  const setBudgetingMethodId = useAppStore((state) => state.setBudgetingMethodId);
 
   useEffect(() => {
     Animated.timing(progressAnimated, {
@@ -399,6 +401,7 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
 
   const handleContinue = () => {
     if (showRecommendation) {
+      setBudgetingMethodId(recommendation.profileId);
       onFinish();
       return;
     }
@@ -607,7 +610,7 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
                     tone="inverted"
                   />
                 }
-                onPress={onFinish}
+                onPress={() => handleContinue()}
                 size="md"
                 style={styles.ctaButton}
               >

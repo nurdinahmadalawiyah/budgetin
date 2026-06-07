@@ -1,6 +1,7 @@
 export type RootStackParamList = {
   Auth: undefined;
   InteractiveQuiz: undefined;
+  BudgetPreview: undefined;
   MainTabs: undefined;
   Onboarding: undefined;
 };

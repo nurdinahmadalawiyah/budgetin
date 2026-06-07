@@ -5,10 +5,12 @@ import { RootStackParamList } from "@/core/navigation/types";
 import {
   useAppStore,
   useHasActiveSession,
+  useHasCompletedBudgetPreview,
   useHasCompletedInteractiveQuiz,
   useHasCompletedOnboarding,
 } from "@/core/store";
 import { AuthView } from "@/features/auth/presentation/views/auth-view";
+import { BudgetPreviewView } from "@/features/budget-preview/views/budget-preview-view";
 import { InteractiveQuizView } from "@/features/interactive-quiz/presentation/views/interactive-quiz-view";
 import { OnboardingView } from "@/features/onboarding/presentation/views/onboarding-view";
 
@@ -26,6 +28,11 @@ export function RootNavigator() {
   );
   const signInAsGuest = useAppStore((state) => state.signInAsGuest);
   const signInWithGoogle = useAppStore((state) => state.signInWithGoogle);
+
+  const hasCompletedBudgetPreview = useHasCompletedBudgetPreview();
+  const setHasCompletedBudgetPreview = useAppStore(
+    (state) => state.setHasCompletedBudgetPreview,
+  );
 
   return (
     <Stack.Navigator
@@ -78,7 +85,21 @@ export function RootNavigator() {
         </Stack.Group>
       ) : null}
 
-      {hasCompletedOnboarding && hasActiveSession && hasCompletedInteractiveQuiz ? (
+      {hasCompletedOnboarding && hasActiveSession && hasCompletedInteractiveQuiz && !hasCompletedBudgetPreview ? (
+        <Stack.Group navigationKey="budget-preview-flow">
+          <Stack.Screen name="BudgetPreview">
+            {() => (
+              <BudgetPreviewView 
+                onFinish={() => {
+                  setHasCompletedBudgetPreview(true);
+                }}
+              />
+            )}
+          </Stack.Screen>
+        </Stack.Group>
+      ) : null}
+
+      {hasCompletedOnboarding && hasActiveSession && hasCompletedInteractiveQuiz && hasCompletedBudgetPreview ? (
         <Stack.Group navigationKey="app-flow">
           <Stack.Screen name="MainTabs" component={AppTabs} />
         </Stack.Group>
