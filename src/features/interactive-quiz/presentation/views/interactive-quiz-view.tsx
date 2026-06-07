@@ -19,7 +19,10 @@ import { useAppStore } from "@/core/store";
 import { useBudgetinTheme } from "@/core/theme/hooks/use-budgetin-theme";
 import { BudgetinPalette, Fonts, Spacing } from "@/core/theme/theme";
 import { QuizOptionCard } from "@/features/interactive-quiz/presentation/components/quiz-option-card";
-import { QuizRecommendationCard } from "@/features/interactive-quiz/presentation/components/quiz-recommendation-card";
+import {
+  QuizProfileId,
+  QuizRecommendationReveal,
+} from "@/features/interactive-quiz/presentation/components/quiz-recommendation-reveal";
 
 type InteractiveQuizViewProps = {
   onFinish: () => void;
@@ -48,6 +51,7 @@ type QuizQuestion = {
 type Recommendation = {
   descriptionKey: string;
   labelKey: string;
+  profileId: QuizProfileId;
   summaryKey: string;
 };
 
@@ -59,32 +63,42 @@ const questions: QuizQuestion[] = [
       {
         key: "track-all",
         method: "zero-based",
-        subtitleKey: "interactiveQuiz.questions.expenseTracking.options.trackAll.subtitle",
-        titleKey: "interactiveQuiz.questions.expenseTracking.options.trackAll.title",
+        subtitleKey:
+          "interactiveQuiz.questions.expenseTracking.options.trackAll.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.expenseTracking.options.trackAll.title",
       },
       {
         key: "focus-biggest",
         method: "priority-based",
-        subtitleKey: "interactiveQuiz.questions.expenseTracking.options.focusBiggest.subtitle",
-        titleKey: "interactiveQuiz.questions.expenseTracking.options.focusBiggest.title",
+        subtitleKey:
+          "interactiveQuiz.questions.expenseTracking.options.focusBiggest.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.expenseTracking.options.focusBiggest.title",
       },
       {
         key: "allocate-all",
         method: "anti-impulse",
-        subtitleKey: "interactiveQuiz.questions.expenseTracking.options.allocateAll.subtitle",
-        titleKey: "interactiveQuiz.questions.expenseTracking.options.allocateAll.title",
+        subtitleKey:
+          "interactiveQuiz.questions.expenseTracking.options.allocateAll.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.expenseTracking.options.allocateAll.title",
       },
       {
         key: "goal-first",
         method: "flexible",
-        subtitleKey: "interactiveQuiz.questions.expenseTracking.options.goalFirst.subtitle",
-        titleKey: "interactiveQuiz.questions.expenseTracking.options.goalFirst.title",
+        subtitleKey:
+          "interactiveQuiz.questions.expenseTracking.options.goalFirst.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.expenseTracking.options.goalFirst.title",
       },
       {
         key: "freedom-first",
         method: "freedom",
-        subtitleKey: "interactiveQuiz.questions.expenseTracking.options.freedomFirst.subtitle",
-        titleKey: "interactiveQuiz.questions.expenseTracking.options.freedomFirst.title",
+        subtitleKey:
+          "interactiveQuiz.questions.expenseTracking.options.freedomFirst.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.expenseTracking.options.freedomFirst.title",
       },
     ],
   },
@@ -95,32 +109,42 @@ const questions: QuizQuestion[] = [
       {
         key: "rarely-tempted",
         method: "anti-impulse",
-        subtitleKey: "interactiveQuiz.questions.promoResponse.options.rarelyTempted.subtitle",
-        titleKey: "interactiveQuiz.questions.promoResponse.options.rarelyTempted.title",
+        subtitleKey:
+          "interactiveQuiz.questions.promoResponse.options.rarelyTempted.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.promoResponse.options.rarelyTempted.title",
       },
       {
         key: "often-buy",
         method: "zero-based",
-        subtitleKey: "interactiveQuiz.questions.promoResponse.options.oftenBuy.subtitle",
-        titleKey: "interactiveQuiz.questions.promoResponse.options.oftenBuy.title",
+        subtitleKey:
+          "interactiveQuiz.questions.promoResponse.options.oftenBuy.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.promoResponse.options.oftenBuy.title",
       },
       {
         key: "very-tempted",
         method: "priority-based",
-        subtitleKey: "interactiveQuiz.questions.promoResponse.options.veryTempted.subtitle",
-        titleKey: "interactiveQuiz.questions.promoResponse.options.veryTempted.title",
+        subtitleKey:
+          "interactiveQuiz.questions.promoResponse.options.veryTempted.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.promoResponse.options.veryTempted.title",
       },
       {
         key: "compare-to-goal",
         method: "flexible",
-        subtitleKey: "interactiveQuiz.questions.promoResponse.options.compareToGoal.subtitle",
-        titleKey: "interactiveQuiz.questions.promoResponse.options.compareToGoal.title",
+        subtitleKey:
+          "interactiveQuiz.questions.promoResponse.options.compareToGoal.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.promoResponse.options.compareToGoal.title",
       },
       {
         key: "investment-first",
         method: "freedom",
-        subtitleKey: "interactiveQuiz.questions.promoResponse.options.investmentFirst.subtitle",
-        titleKey: "interactiveQuiz.questions.promoResponse.options.investmentFirst.title",
+        subtitleKey:
+          "interactiveQuiz.questions.promoResponse.options.investmentFirst.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.promoResponse.options.investmentFirst.title",
       },
     ],
   },
@@ -131,32 +155,42 @@ const questions: QuizQuestion[] = [
       {
         key: "daily-control",
         method: "zero-based",
-        subtitleKey: "interactiveQuiz.questions.mainPriority.options.dailyControl.subtitle",
-        titleKey: "interactiveQuiz.questions.mainPriority.options.dailyControl.title",
+        subtitleKey:
+          "interactiveQuiz.questions.mainPriority.options.dailyControl.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.mainPriority.options.dailyControl.title",
       },
       {
         key: "needs-vs-wants",
         method: "priority-based",
-        subtitleKey: "interactiveQuiz.questions.mainPriority.options.needsVsWants.subtitle",
-        titleKey: "interactiveQuiz.questions.mainPriority.options.needsVsWants.title",
+        subtitleKey:
+          "interactiveQuiz.questions.mainPriority.options.needsVsWants.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.mainPriority.options.needsVsWants.title",
       },
       {
         key: "every-rupiah",
         method: "anti-impulse",
-        subtitleKey: "interactiveQuiz.questions.mainPriority.options.everyRupiah.subtitle",
-        titleKey: "interactiveQuiz.questions.mainPriority.options.everyRupiah.title",
+        subtitleKey:
+          "interactiveQuiz.questions.mainPriority.options.everyRupiah.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.mainPriority.options.everyRupiah.title",
       },
       {
         key: "special-goals",
         method: "flexible",
-        subtitleKey: "interactiveQuiz.questions.mainPriority.options.specialGoals.subtitle",
-        titleKey: "interactiveQuiz.questions.mainPriority.options.specialGoals.title",
+        subtitleKey:
+          "interactiveQuiz.questions.mainPriority.options.specialGoals.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.mainPriority.options.specialGoals.title",
       },
       {
         key: "long-term",
         method: "freedom",
-        subtitleKey: "interactiveQuiz.questions.mainPriority.options.longTerm.subtitle",
-        titleKey: "interactiveQuiz.questions.mainPriority.options.longTerm.title",
+        subtitleKey:
+          "interactiveQuiz.questions.mainPriority.options.longTerm.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.mainPriority.options.longTerm.title",
       },
     ],
   },
@@ -167,32 +201,42 @@ const questions: QuizQuestion[] = [
       {
         key: "simple-fast",
         method: "priority-based",
-        subtitleKey: "interactiveQuiz.questions.comfortStyle.options.simpleFast.subtitle",
-        titleKey: "interactiveQuiz.questions.comfortStyle.options.simpleFast.title",
+        subtitleKey:
+          "interactiveQuiz.questions.comfortStyle.options.simpleFast.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.comfortStyle.options.simpleFast.title",
       },
       {
         key: "detail-disciplined",
         method: "zero-based",
-        subtitleKey: "interactiveQuiz.questions.comfortStyle.options.detailDisciplined.subtitle",
-        titleKey: "interactiveQuiz.questions.comfortStyle.options.detailDisciplined.title",
+        subtitleKey:
+          "interactiveQuiz.questions.comfortStyle.options.detailDisciplined.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.comfortStyle.options.detailDisciplined.title",
       },
       {
         key: "every-rupiah-task",
         method: "anti-impulse",
-        subtitleKey: "interactiveQuiz.questions.comfortStyle.options.everyRupiahTask.subtitle",
-        titleKey: "interactiveQuiz.questions.comfortStyle.options.everyRupiahTask.title",
+        subtitleKey:
+          "interactiveQuiz.questions.comfortStyle.options.everyRupiahTask.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.comfortStyle.options.everyRupiahTask.title",
       },
       {
         key: "goal-target",
         method: "flexible",
-        subtitleKey: "interactiveQuiz.questions.comfortStyle.options.goalTarget.subtitle",
-        titleKey: "interactiveQuiz.questions.comfortStyle.options.goalTarget.title",
+        subtitleKey:
+          "interactiveQuiz.questions.comfortStyle.options.goalTarget.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.comfortStyle.options.goalTarget.title",
       },
       {
         key: "future-extreme",
         method: "freedom",
-        subtitleKey: "interactiveQuiz.questions.comfortStyle.options.futureExtreme.subtitle",
-        titleKey: "interactiveQuiz.questions.comfortStyle.options.futureExtreme.title",
+        subtitleKey:
+          "interactiveQuiz.questions.comfortStyle.options.futureExtreme.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.comfortStyle.options.futureExtreme.title",
       },
     ],
   },
@@ -203,32 +247,42 @@ const questions: QuizQuestion[] = [
       {
         key: "cut-daily",
         method: "zero-based",
-        subtitleKey: "interactiveQuiz.questions.financialFocus.options.cutDaily.subtitle",
-        titleKey: "interactiveQuiz.questions.financialFocus.options.cutDaily.title",
+        subtitleKey:
+          "interactiveQuiz.questions.financialFocus.options.cutDaily.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.financialFocus.options.cutDaily.title",
       },
       {
         key: "short-goal",
         method: "flexible",
-        subtitleKey: "interactiveQuiz.questions.financialFocus.options.shortGoal.subtitle",
-        titleKey: "interactiveQuiz.questions.financialFocus.options.shortGoal.title",
+        subtitleKey:
+          "interactiveQuiz.questions.financialFocus.options.shortGoal.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.financialFocus.options.shortGoal.title",
       },
       {
         key: "balance-life",
         method: "priority-based",
-        subtitleKey: "interactiveQuiz.questions.financialFocus.options.balanceLife.subtitle",
-        titleKey: "interactiveQuiz.questions.financialFocus.options.balanceLife.title",
+        subtitleKey:
+          "interactiveQuiz.questions.financialFocus.options.balanceLife.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.financialFocus.options.balanceLife.title",
       },
       {
         key: "full-control",
         method: "anti-impulse",
-        subtitleKey: "interactiveQuiz.questions.financialFocus.options.fullControl.subtitle",
-        titleKey: "interactiveQuiz.questions.financialFocus.options.fullControl.title",
+        subtitleKey:
+          "interactiveQuiz.questions.financialFocus.options.fullControl.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.financialFocus.options.fullControl.title",
       },
       {
         key: "passive-income",
         method: "freedom",
-        subtitleKey: "interactiveQuiz.questions.financialFocus.options.passiveIncome.subtitle",
-        titleKey: "interactiveQuiz.questions.financialFocus.options.passiveIncome.title",
+        subtitleKey:
+          "interactiveQuiz.questions.financialFocus.options.passiveIncome.subtitle",
+        titleKey:
+          "interactiveQuiz.questions.financialFocus.options.passiveIncome.title",
       },
     ],
   },
@@ -238,26 +292,31 @@ const recommendations: Record<BudgetingMethod, Recommendation> = {
   "anti-impulse": {
     descriptionKey: "interactiveQuiz.recommendation.antiImpulse.description",
     labelKey: "interactiveQuiz.recommendation.antiImpulse.label",
+    profileId: "anti-impulse",
     summaryKey: "interactiveQuiz.recommendation.antiImpulse.summary",
   },
   flexible: {
     descriptionKey: "interactiveQuiz.recommendation.flexible.description",
     labelKey: "interactiveQuiz.recommendation.flexible.label",
+    profileId: "flexible",
     summaryKey: "interactiveQuiz.recommendation.flexible.summary",
   },
   freedom: {
     descriptionKey: "interactiveQuiz.recommendation.freedom.description",
     labelKey: "interactiveQuiz.recommendation.freedom.label",
+    profileId: "freedom",
     summaryKey: "interactiveQuiz.recommendation.freedom.summary",
   },
   "priority-based": {
     descriptionKey: "interactiveQuiz.recommendation.priorityBased.description",
     labelKey: "interactiveQuiz.recommendation.priorityBased.label",
+    profileId: "priority-based",
     summaryKey: "interactiveQuiz.recommendation.priorityBased.summary",
   },
   "zero-based": {
     descriptionKey: "interactiveQuiz.recommendation.zeroBased.description",
     labelKey: "interactiveQuiz.recommendation.zeroBased.label",
+    profileId: "zero-based",
     summaryKey: "interactiveQuiz.recommendation.zeroBased.summary",
   },
 };
@@ -359,6 +418,12 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
     setQuestionIndex((current) => current + 1);
   };
 
+  const handleRetry = () => {
+    setAnswers({});
+    setQuestionIndex(0);
+    setShowRecommendation(false);
+  };
+
   return (
     <>
       <StatusBar style={theme.statusBarStyle} />
@@ -409,24 +474,38 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
                   ? undefined
                   : handleBack
               }
+              rightSlot={
+                showRecommendation ? (
+                  <AppButton
+                    glow={false}
+                    onPress={handleRetry}
+                    size="sm"
+                    variant="glass"
+                  >
+                    {t("interactiveQuiz.recommendation.retry")}
+                  </AppButton>
+                ) : undefined
+              }
             />
 
-            <View
-              style={[
-                styles.progressTrack,
-                { backgroundColor: theme.onboarding.pageIndicatorInactive },
-              ]}
-            >
-              <Animated.View
+            {!showRecommendation ? (
+              <View
                 style={[
-                  styles.progressFill,
-                  {
-                    backgroundColor: "#BFE4B1",
-                    width: progressWidth,
-                  },
+                  styles.progressTrack,
+                  { backgroundColor: theme.onboarding.pageIndicatorInactive },
                 ]}
-              />
-            </View>
+              >
+                <Animated.View
+                  style={[
+                    styles.progressFill,
+                    {
+                      backgroundColor: "#BFE4B1",
+                      width: progressWidth,
+                    },
+                  ]}
+                />
+              </View>
+            ) : null}
           </View>
 
           <ScrollView
@@ -476,74 +555,69 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
               </View>
             ) : (
               <View style={styles.contentBlock}>
-                <View style={styles.questionHeader}>
-                  <View style={[styles.questionPill, styles.questionPillCoral]}>
-                    <Text
-                      style={[
-                        styles.questionPillText,
-                        styles.questionPillTextCoral,
-                      ]}
-                    >
-                      {t("interactiveQuiz.recommendation.pill")}
-                    </Text>
-                  </View>
-                  <Text
-                    style={[
-                      styles.questionTitle,
-                      { color: theme.text.primary },
-                    ]}
-                  >
-                    {t("interactiveQuiz.recommendation.title")}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.supportingText,
-                      { color: theme.text.secondary },
-                    ]}
-                  >
-                    {t("interactiveQuiz.recommendation.intro")}
-                  </Text>
-                </View>
-
-                <QuizRecommendationCard
+                <QuizRecommendationReveal
                   description={t(recommendation.descriptionKey)}
-                  eyebrow={t("interactiveQuiz.recommendation.eyebrow")}
-                  label={t(recommendation.labelKey)}
-                  summary={t(recommendation.summaryKey)}
-                  theme={theme}
+                  onSwitchMethod={handleRetry}
+                  pillLabel={t("interactiveQuiz.recommendation.eyebrow")}
+                  profileId={recommendation.profileId}
+                  subtitle={t(recommendation.summaryKey)}
+                  switchLabel={t("interactiveQuiz.recommendation.switchLabel")}
+                  switchPrompt={t(
+                    "interactiveQuiz.recommendation.switchPrompt",
+                  )}
+                  title={t(recommendation.labelKey)}
                 />
               </View>
             )}
           </ScrollView>
-
-          <View style={styles.ctaWrap}>
-            <AppButton
-              disabled={!showRecommendation && !selectedAnswerKey}
-              fullWidth={true}
-              glow={true}
-              iconRight={
-                showRecommendation || !selectedAnswerKey ? undefined : (
+          {!showRecommendation ? (
+            <View style={styles.ctaWrap}>
+              <AppButton
+                disabled={!selectedAnswerKey}
+                fullWidth={true}
+                glow={true}
+                iconRight={
+                  !selectedAnswerKey ? undefined : (
+                    <AppIcon
+                      family="ion"
+                      name="arrow-forward"
+                      size={18}
+                      tone="inverted"
+                    />
+                  )
+                }
+                onPress={handleContinue}
+                size="md"
+                style={styles.ctaButton}
+              >
+                {questionIndex === questions.length - 1
+                  ? t("interactiveQuiz.cta.seeRecommendation")
+                  : !selectedAnswerKey
+                    ? t("interactiveQuiz.cta.chooseAnswerFirst")
+                    : t("common.continue")}
+              </AppButton>
+            </View>
+          ) : (
+            <View style={styles.ctaWrap}>
+              <AppButton
+                fullWidth={true}
+                glow={true}
+                iconRight={
                   <AppIcon
                     family="ion"
                     name="arrow-forward"
                     size={18}
                     tone="inverted"
                   />
-                )
-              }
-              onPress={handleContinue}
-              size="md"
-              style={styles.ctaButton}
-            >
-              {showRecommendation
-                ? t("interactiveQuiz.cta.enterApp")
-                : questionIndex === questions.length - 1
-                  ? t("interactiveQuiz.cta.seeRecommendation")
-                  : !selectedAnswerKey
-                    ? t("interactiveQuiz.cta.chooseAnswerFirst")
-                    : t("common.continue")}
-            </AppButton>
-          </View>
+                }
+                onPress={onFinish}
+                size="md"
+                style={styles.ctaButton}
+              >
+                {t("interactiveQuiz.recommendation.cta")}
+              </AppButton>
+            </View>
+          )}
         </PhoneShell>
       </View>
     </>
@@ -570,6 +644,7 @@ const styles = StyleSheet.create({
   },
   contentBlock: {
     gap: 18,
+    paddingBottom: Spacing.three,
   },
   ctaButton: {
     alignSelf: "stretch",
@@ -619,17 +694,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.two,
   },
-  questionPillCoral: {
-    backgroundColor: "rgba(240, 107, 97, 0.18)",
-  },
   questionPillText: {
     fontFamily: Fonts.body,
     fontSize: 12,
     lineHeight: 12,
     color: BudgetinPalette.mint,
-  },
-  questionPillTextCoral: {
-    color: "#FFB5AF",
   },
   questionTitle: {
     fontFamily: Fonts.display,
@@ -649,11 +718,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-  },
-  supportingText: {
-    fontFamily: "DMSans_400Regular",
-    fontSize: 14,
-    lineHeight: 21,
   },
   topBar: {
     gap: 14,

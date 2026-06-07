@@ -1,0 +1,59 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#1a2a4a"/>
+      <stop offset="100%" stop-color="#080d1a"/>
+    </radialGradient>
+    <radialGradient id="glowCenter" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5aaaf0" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#5aaaf0" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Shield shape -->
+  <path d="M100 8 L182 44 L182 112 Q182 166 100 194 Q18 166 18 112 L18 44 Z"
+    fill="url(#bg)" stroke="#2a4a8a" stroke-width="2"/>
+  <path d="M100 8 L182 44 L182 112 Q182 166 100 194 Q18 166 18 112 L18 44 Z"
+    fill="url(#glowCenter)"/>
+
+  <!-- Inner shield ring -->
+  <path d="M100 18 L172 50 L172 112 Q172 158 100 184 Q28 158 28 112 L28 50 Z"
+    fill="none" stroke="#3a6ab0" stroke-width="1" opacity="0.5"/>
+
+  <!-- Scale balance icon -->
+  <g transform="translate(100,98)" filter="url(#glow)">
+    <!-- Fulcrum triangle -->
+    <polygon points="0,28 10,42 -10,42" fill="#5aaaf0"/>
+    <!-- Vertical pole -->
+    <rect x="-2.5" y="-32" width="5" height="62" rx="2.5" fill="#7abcf8"/>
+    <!-- Horizontal beam -->
+    <rect x="-52" y="-35" width="104" height="6" rx="3" fill="#5aaaf0"/>
+    <!-- Top diamond -->
+    <polygon points="0,-40 7,-33 0,-26 -7,-33" fill="#b0d8ff"/>
+
+    <!-- Left arm & pan -->
+    <line x1="-52" y1="-32" x2="-52" y2="-10" stroke="#5aaaf0" stroke-width="2"/>
+    <path d="M-66,-10 Q-52,-2 -38,-10" fill="none" stroke="#7abcf8" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Right arm & pan -->
+    <line x1="52" y1="-32" x2="52" y2="-10" stroke="#5aaaf0" stroke-width="2"/>
+    <path d="M38,-10 Q52,-2 66,-10" fill="none" stroke="#7abcf8" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Base platform -->
+    <rect x="-18" y="42" width="36" height="6" rx="3" fill="#3a6ab0"/>
+  </g>
+
+  <!-- Decorative arcs -->
+  <path d="M50 130 A55 55 0 0 0 150 130" fill="none" stroke="#3a6ab0" stroke-width="0.8" stroke-dasharray="4 4" opacity="0.4"/>
+
+  <!-- Shield tip accent -->
+  <circle cx="100" cy="8" r="4" fill="#3a6ab0"/>
+  <circle cx="182" cy="44" r="3" fill="#3a6ab0"/>
+  <circle cx="182" cy="112" r="3" fill="#3a6ab0"/>
+  <circle cx="18"  cy="112" r="3" fill="#3a6ab0"/>
+  <circle cx="18"  cy="44"  r="3" fill="#3a6ab0"/>
+</svg>

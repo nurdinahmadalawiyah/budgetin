@@ -1,0 +1,66 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#220a2a"/>
+      <stop offset="100%" stop-color="#0a030e"/>
+    </radialGradient>
+    <radialGradient id="glowCenter" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#cc55ee" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#cc55ee" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Octagon -->
+  <polygon points="66,8 134,8 188,56 188,144 134,192 66,192 12,144 12,56"
+    fill="url(#bg)" stroke="#6a1a8a" stroke-width="2"/>
+  <polygon points="66,8 134,8 188,56 188,144 134,192 66,192 12,144 12,56"
+    fill="url(#glowCenter)"/>
+
+  <!-- Inner octagon ring -->
+  <polygon points="70,18 130,18 178,62 178,138 130,182 70,182 22,138 22,62"
+    fill="none" stroke="#8a2aaa" stroke-width="1" opacity="0.5"/>
+
+  <!-- Bullseye rings -->
+  <g transform="translate(100,96)" filter="url(#softGlow)">
+    <circle cx="0" cy="0" r="52" fill="none" stroke="#4a1060" stroke-width="2.5"/>
+    <circle cx="0" cy="0" r="40" fill="#3a0850" opacity="0.4"/>
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#7a20a0" stroke-width="2.5"/>
+    <circle cx="0" cy="0" r="26" fill="#5a10802" opacity="0.3"/>
+    <circle cx="0" cy="0" r="26" fill="none" stroke="#aa40d0" stroke-width="3"/>
+    <circle cx="0" cy="0" r="13" fill="#8a20b0" opacity="0.5"/>
+    <circle cx="0" cy="0" r="13" fill="none" stroke="#dd66ff" stroke-width="3"/>
+    <!-- Bullseye center -->
+    <circle cx="0" cy="0" r="5" fill="#ee88ff"/>
+  </g>
+
+  <!-- Arrow (hitting the target diagonally) -->
+  <g filter="url(#glow)">
+    <!-- Arrow shaft -->
+    <line x1="158" y1="44" x2="108" y2="94"
+      stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- Arrowhead -->
+    <polygon points="102,100 112,82 124,96" fill="#ffffff"/>
+    <!-- Fletching feathers -->
+    <line x1="158" y1="44" x2="168" y2="36" stroke="#dd66ff" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="158" y1="44" x2="166" y2="54" stroke="#dd66ff" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="154" y1="48" x2="162" y2="38" stroke="#dd66ff" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+  </g>
+
+  <!-- Octagon vertex dots -->
+  <circle cx="66"  cy="8"   r="3.5" fill="#6a1a8a"/>
+  <circle cx="134" cy="8"   r="3.5" fill="#6a1a8a"/>
+  <circle cx="188" cy="56"  r="3.5" fill="#6a1a8a"/>
+  <circle cx="188" cy="144" r="3.5" fill="#6a1a8a"/>
+  <circle cx="134" cy="192" r="3.5" fill="#6a1a8a"/>
+  <circle cx="66"  cy="192" r="3.5" fill="#6a1a8a"/>
+  <circle cx="12"  cy="144" r="3.5" fill="#6a1a8a"/>
+  <circle cx="12"  cy="56"  r="3.5" fill="#6a1a8a"/>
+</svg>

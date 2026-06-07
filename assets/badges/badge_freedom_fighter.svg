@@ -1,0 +1,94 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="60%" r="55%">
+      <stop offset="0%" stop-color="#2a0e02"/>
+      <stop offset="100%" stop-color="#080200"/>
+    </radialGradient>
+    <radialGradient id="glowCenter" cx="50%" cy="65%" r="50%">
+      <stop offset="0%" stop-color="#ff7020" stop-opacity="0.5"/>
+      <stop offset="60%" stop-color="#ff4000" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#ff2000" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="flameGrad" cx="50%" cy="80%" r="60%">
+      <stop offset="0%"   stop-color="#fff5a0"/>
+      <stop offset="30%"  stop-color="#ffcc30"/>
+      <stop offset="65%"  stop-color="#ff7020"/>
+      <stop offset="100%" stop-color="#cc2000"/>
+    </radialGradient>
+    <filter id="fireGlow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Circle base -->
+  <circle cx="100" cy="100" r="94" fill="url(#bg)" stroke="#8a2800" stroke-width="2"/>
+  <circle cx="100" cy="100" r="94" fill="url(#glowCenter)"/>
+
+  <!-- Inner circle ring -->
+  <circle cx="100" cy="100" r="84" fill="none" stroke="#aa3800" stroke-width="1" opacity="0.5"/>
+  <!-- Dashed decorative ring -->
+  <circle cx="100" cy="100" r="89" fill="none" stroke="#661800" stroke-width="0.8" stroke-dasharray="6 5" opacity="0.5"/>
+
+  <!-- Flame body -->
+  <g filter="url(#fireGlow)">
+    <!-- Outer flame shape -->
+    <path d="M100,148
+      C76,138 60,116 66,90
+      C68,80 73,72 78,62
+      C80,72 76,80 80,88
+      C84,70 90,52 100,36
+      C110,52 116,70 120,88
+      C124,80 120,72 122,62
+      C127,72 132,80 134,90
+      C140,116 124,138 100,148Z"
+      fill="url(#flameGrad)" opacity="0.95"/>
+
+    <!-- Inner brighter flame -->
+    <path d="M100,143
+      C82,133 70,115 74,94
+      C76,86 80,80 84,72
+      C85,80 83,86 86,92
+      C90,76 95,60 100,48
+      C105,60 110,76 114,92
+      C117,86 115,80 116,72
+      C120,80 124,86 126,94
+      C130,115 118,133 100,143Z"
+      fill="#ffcc40" opacity="0.8"/>
+
+    <!-- Core flame -->
+    <path d="M100,136
+      C88,126 82,110 86,96
+      C88,90 92,85 95,78
+      C96,85 94,90 97,95
+      C99,84 101,72 104,65
+      C107,72 109,84 111,95
+      C114,90 112,85 114,78
+      C118,85 122,90 124,96
+      C128,110 112,126 100,136Z"
+      fill="#fff5c0" opacity="0.7"/>
+  </g>
+
+  <!-- Lightning bolt (freedom energy) -->
+  <g filter="url(#softGlow)">
+    <polygon points="105,78 92,104 100,104 95,128 112,98 103,98"
+      fill="#ffffff" opacity="0.95"/>
+  </g>
+
+  <!-- Glow pool at base of flame -->
+  <ellipse cx="100" cy="150" rx="30" ry="8" fill="#ff6020" opacity="0.3" filter="url(#fireGlow)"/>
+
+  <!-- 8 orbit dots -->
+  <circle cx="100" cy="6"   r="4" fill="#8a2800"/>
+  <circle cx="167" cy="27"  r="3" fill="#8a2800"/>
+  <circle cx="194" cy="100" r="3" fill="#8a2800"/>
+  <circle cx="167" cy="173" r="3" fill="#8a2800"/>
+  <circle cx="100" cy="194" r="4" fill="#8a2800"/>
+  <circle cx="33"  cy="173" r="3" fill="#8a2800"/>
+  <circle cx="6"   cy="100" r="3" fill="#8a2800"/>
+  <circle cx="33"  cy="27"  r="3" fill="#8a2800"/>
+</svg>
