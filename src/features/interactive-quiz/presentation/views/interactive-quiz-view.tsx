@@ -14,6 +14,7 @@ import { AppBar } from "@/core/components/layout/app-bar";
 import { PhoneShell } from "@/core/components/layout/phone-shell";
 import { AppButton } from "@/core/components/ui/app-button";
 import { AppIcon } from "@/core/components/ui/app-icon";
+import { useAppStore } from "@/core/store";
 import { useBudgetinTheme } from "@/core/theme/hooks/use-budgetin-theme";
 import { BudgetinPalette, Fonts, Spacing } from "@/core/theme/theme";
 import { QuizOptionCard } from "@/features/interactive-quiz/presentation/components/quiz-option-card";
@@ -47,6 +48,7 @@ type Recommendation = {
   description: string;
   label: string;
   summary: string;
+  id: string;
 };
 
 const questions: QuizQuestion[] = [
@@ -239,6 +241,7 @@ const recommendations: Record<BudgetingMethod, Recommendation> = {
     label: "Zero-Impulse Budget",
     summary:
       "Metode ini cocok kalau kamu tenang saat semua uang sudah punya tugas.",
+    id: "anti-impulse",
   },
   flexible: {
     description:
@@ -246,12 +249,14 @@ const recommendations: Record<BudgetingMethod, Recommendation> = {
     label: "Goal-First Budget",
     summary:
       "Kamu terlihat nyaman kalau budgeting tetap luwes tapi tujuan besarnya jelas.",
+    id: "flexible",
   },
   freedom: {
     description:
       "Budgeting dipakai untuk memperbesar porsi tabungan, investasi, dan runway hidup. Cocok kalau kamu rela hidup lebih lean demi percepatan target besar.",
     label: "Freedom Builder",
     summary: "Arahmu kuat ke aset dan kebebasan finansial jangka panjang.",
+    id: "freedom",
   },
   "priority-based": {
     description:
@@ -259,6 +264,7 @@ const recommendations: Record<BudgetingMethod, Recommendation> = {
     label: "Priority Buckets",
     summary:
       "Kamu butuh sistem yang simpel, cepat dibaca, dan tetap menjaga keseimbangan hidup.",
+    id: "priority-based",
   },
   "zero-based": {
     description:
@@ -266,6 +272,7 @@ const recommendations: Record<BudgetingMethod, Recommendation> = {
     label: "Zero-Based Budget",
     summary:
       "Kamu cenderung nyaman saat cashflow harian terlihat jelas dan terukur.",
+    id: "zero-based",
   },
 };
 
@@ -313,6 +320,7 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
   const progress = (questionIndex + 1) / questions.length;
   const recommendation = useMemo(() => getRecommendation(answers), [answers]);
   const [progressAnimated] = useState(() => new Animated.Value(progress));
+  const setBudgetingMethod = useAppStore((state) => state.setBudgetingMethod);
 
   useEffect(() => {
     Animated.timing(progressAnimated, {
@@ -347,19 +355,24 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
 
   const handleContinue = () => {
     if (showRecommendation) {
+      console.log("showRecommendation", showRecommendation);
+      setBudgetingMethod(recommendation.id);
       onFinish();
       return;
     }
 
     if (!selectedAnswerKey) {
+      console.log("selectedAnswerKey", selectedAnswerKey);
       return;
     }
 
     if (questionIndex === questions.length - 1) {
+      console.log("questionIndex === questions.length - 1", questionIndex === questions.length - 1);
       setShowRecommendation(true);
       return;
     }
 
+    console.log("setQuestionIndex", setQuestionIndex);
     setQuestionIndex((current) => current + 1);
   };
 
