@@ -24,8 +24,8 @@ type AppStoreState = {
   /*
   TODO: This is Temporary State, Must move to database if done development
   */
-  budgetingMethodLabelKey: string | null;
-  setBudgetingMethodLabelKey: (value: string) => void;
+  budgetingMethodId: string | null;
+  setBudgetingMethodId: (value: string) => void;
 };
 
 export const useAppStore = createStore<AppStoreState>('app-store', (set) => ({
@@ -77,9 +77,9 @@ export const useAppStore = createStore<AppStoreState>('app-store', (set) => ({
       bootstrapStatus: 'idle',
     });
   },
-  budgetingMethodLabelKey: null,
-  setBudgetingMethodLabelKey: (value) => {
-    set({ budgetingMethodLabelKey: value });
+  budgetingMethodId: null,
+  setBudgetingMethodId: (value) => {
+    set({ budgetingMethodId: value });
   },
 }));
 
@@ -112,6 +112,6 @@ export function useHasActiveSession() {
   return useAppStore((state) => state.sessionMode !== null);
 }
 
-export function useBudgetingMethodLabelKey() {
-  return useAppStore((state) => state.budgetingMethodLabelKey);
+export function useBudgetingMethodId() {
+  return useAppStore((state) => state.budgetingMethodId);
 }

@@ -366,7 +366,7 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
   const progress = (questionIndex + 1) / questions.length;
   const recommendation = useMemo(() => getRecommendation(answers), [answers]);
   const [progressAnimated] = useState(() => new Animated.Value(progress));
-  const setBudgetingMethodLabelKey = useAppStore((state) => state.setBudgetingMethodLabelKey);
+  const setBudgetingMethodId = useAppStore((state) => state.setBudgetingMethodId);
 
   useEffect(() => {
     Animated.timing(progressAnimated, {
@@ -401,7 +401,7 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
 
   const handleContinue = () => {
     if (showRecommendation) {
-      setBudgetingMethodLabelKey(recommendation.labelKey);
+      setBudgetingMethodId(recommendation.profileId);
       onFinish();
       return;
     }
@@ -610,7 +610,7 @@ export function InteractiveQuizView({ onFinish }: InteractiveQuizViewProps) {
                     tone="inverted"
                   />
                 }
-                onPress={onFinish}
+                onPress={() => handleContinue()}
                 size="md"
                 style={styles.ctaButton}
               >

@@ -14,9 +14,10 @@ import { PhoneShell } from "@/core/components/layout/phone-shell";
 import { AppButton } from "@/core/components/ui/app-button";
 import { AppIcon } from "@/core/components/ui/app-icon";
 import { useLocale } from "@/core/i18n";
-import { useAppStore, useBudgetingMethodLabelKey, useHasCompletedInteractiveQuiz } from "@/core/store";
+import { useAppStore, useBudgetingMethodId, useHasCompletedInteractiveQuiz } from "@/core/store";
 import { useBudgetinTheme } from "@/core/theme/hooks/use-budgetin-theme";
 import { BudgetinPalette, Fonts, Spacing } from "@/core/theme/theme";
+import { BUDGETING_METHOD_NAME_KEYS } from "@/features/interactive-quiz/data/budgeting-method-keys";
 import { MonthlyIncomeCard } from "@/features/budget-preview/components/monthly-income-card";
 
 type BudgetPreviewViewProps = {
@@ -32,7 +33,7 @@ export function BudgetPreviewView({ onFinish }: BudgetPreviewViewProps) {
   const setHasCompletedInteractiveQuiz = useAppStore(
     (state) => state.setHasCompletedInteractiveQuiz,
   );
-  const budgetingMethodLabelKey = useBudgetingMethodLabelKey();
+  const budgetingMethodId = useBudgetingMethodId();
 
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -115,7 +116,7 @@ export function BudgetPreviewView({ onFinish }: BudgetPreviewViewProps) {
 
                 <Text style={[styles.supportingText, { color: theme.text.secondary }]}>
                   Biar auto-budget kamu pas, masukin dulu income bulanan. Metode kamu:{" "}
-                  <Text style={styles.textBold}>{t(budgetingMethodLabelKey ?? "")}</Text>.
+                  <Text style={styles.textMethod}>{t(BUDGETING_METHOD_NAME_KEYS[budgetingMethodId ?? ""] ?? "")}</Text>.
                 </Text>
               </View>
 
@@ -239,7 +240,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingTop: 4,
   },
-  textBold: {
+  textMethod: {
     fontWeight: "700",
+    textTransform: "capitalize",
   },
 });
